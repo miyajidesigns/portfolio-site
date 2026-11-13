@@ -1115,7 +1115,7 @@ $$('.work-row').forEach(r=>{
    ============================================================ */
 const heroClips = $('#heroClips');
 heroClips.innerHTML = HERO.map((h,i)=>`<div class="hero-clip ${h.src||h.poster?'':'is-ph'} ${i?'':'is-active'}">
-  ${h.src?`<video src="${h.src}" ${h.poster?`poster="${h.poster}"`:''} muted loop playsinline preload="${i?'none':'auto'}"></video>`: h.poster?`<img src="${h.poster}" alt="">`:`<span class="hero-ph-label ph">Hero clip ${i+1} · ${h.label.split('· ')[1]}</span>`}
+  ${h.src?`<video src="${h.src}" ${h.poster?`poster="${h.poster}"`:''} muted autoplay loop playsinline preload="${i?'none':'auto'}"></video>`: h.poster?`<img src="${h.poster}" alt="">`:`<span class="hero-ph-label ph">Hero clip ${i+1} · ${h.label.split('· ')[1]}</span>`}
 </div>`).join('');
 let heroI = 0;
 function showHero(i){
@@ -1136,6 +1136,9 @@ function showHero(i){
   }, reduce?0:380);
 }
 showHero(0);
+/* iOS Low Power Mode and some data-saver settings block autoplay: start the hero on the first tap */
+(()=>{ const kick=()=>{ const v=$('.hero-clip.is-active video'); if(v && v.paused) v.play().catch(()=>{}); };
+  ['touchstart','pointerdown','keydown'].forEach(e=>addEventListener(e,kick,{once:true,passive:true})); })();
 if(!reduce) setInterval(()=>{ if(!document.hidden) showHero((heroI+1)%HERO.length); }, 6500);
 
 /* ============================================================

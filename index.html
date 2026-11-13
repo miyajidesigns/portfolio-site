@@ -1,0 +1,1435 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Emiri Miyaji Portfolio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Inter+Tight:wght@400;500;600&display=swap">
+<style>
+/* Layout: fixed top bar · full-bleed hero · centered statement · project index with hover preview ·
+   each case = sticky 1/3 story column + 2/3 scrolling media column · black impact bands + black close.
+   Single deliberate look: white paper, black ink (no dark variant by design). */
+:root{
+  --paper:#ffffff;
+  --ink:#0e0e0d;
+  --ink-2:#5c5a55;
+  --ink-3:#a19e96;
+  --rule:#e7e5e0;
+  --tile:#f1f0ec;
+  --tile-2:#e7e5df;
+  --night:#0e0e0d;
+  --night-2:#1c1b19;
+  --night-3:#2a2926;
+  --on-dark:#ffffff;
+  --on-dark-2:rgba(255,255,255,.72);
+  --scrim:rgba(14,14,13,.55);
+
+  /* "Miller" is used automatically when installed/hosted; Old Standard TT stands in (Scotch Roman cousin). */
+  --f-display:"Miller Display","Miller Banner","Miller Text","Old Standard TT",Georgia,"Times New Roman",serif;
+  --f-sans:"Inter Tight","Helvetica Neue",Helvetica,Arial,sans-serif;
+
+  --nav-h:60px;
+  --gut:28px;
+  --ease:cubic-bezier(.2,.7,.2,1);
+  color-scheme:light;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-sans);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+a{color:inherit}
+button{font:inherit;color:inherit}
+em{font-style:italic}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.on-dark :focus-visible,.hero :focus-visible,.impact :focus-visible,.closing :focus-visible{outline-color:var(--on-dark)}
+.gutter{padding-left:max(var(--gut),env(safe-area-inset-left,0px));padding-right:max(var(--gut),env(safe-area-inset-right,0px))}
+.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--ink-2);margin:0}
+.display{font-family:var(--f-display);font-weight:400}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- NAV ---------- */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:calc(var(--nav-h) + env(safe-area-inset-top,0px));padding-top:env(safe-area-inset-top,0px);display:flex;align-items:center;justify-content:space-between;gap:24px;background:var(--paper);color:var(--ink);border-bottom:1px solid var(--rule);transition:background .35s,color .35s,border-color .35s}
+.nav.on-hero{background:transparent;color:var(--on-dark);border-color:transparent}
+.brand{font-family:var(--f-display);font-size:21px;text-decoration:none;letter-spacing:-.01em;white-space:nowrap}
+.nav-links{display:flex;gap:clamp(16px,2.4vw,36px);list-style:none;margin:0;padding:0;font-size:13px}
+.nav-links a{text-decoration:none;padding-block:4px;border-bottom:1px solid transparent;transition:border-color .2s;white-space:nowrap}
+.nav-links a:hover,.nav-links a.is-active{border-bottom-color:currentColor}
+
+/* ---------- HERO ---------- */
+.hero{position:relative;height:min(92svh,900px);min-height:580px;background:var(--night);color:var(--on-dark);overflow:hidden}
+.hero-clip{position:absolute;inset:0;opacity:0;transition:opacity 1.4s ease}
+.hero-clip.is-active{opacity:1}
+.hero-clip video,.hero-clip img{width:100%;height:100%;object-fit:cover;display:block}
+.hero-clip.is-ph{background:var(--night-2)}
+.hero-clip.is-ph:nth-child(2){background:var(--night-3)}
+.hero-clip.is-ph:nth-child(3){background:#232220}
+.hero-clip.is-ph:nth-child(4){background:#171614}
+.hero-ph-label{position:absolute;top:calc(var(--nav-h) + 28px);right:max(var(--gut),env(safe-area-inset-right,0px));font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--on-dark-2);border:1px dashed rgba(255,255,255,.35);padding:6px 10px}
+.hero-scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,.18) 30%,rgba(0,0,0,.38) 58%,rgba(0,0,0,.72) 100%),linear-gradient(90deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 60%);pointer-events:none}
+.card.is-open .dur{display:none}
+.hero-inner{position:absolute;left:0;right:0;bottom:clamp(32px,6vh,56px);display:flex;align-items:flex-end;justify-content:space-between;gap:32px}
+.hero-copy{max-width:min(980px,72%);min-width:0}
+.hero .eyebrow{color:var(--on-dark-2)}
+.hero h1{font-family:var(--f-display);font-weight:400;font-size:clamp(54px,8.6vw,136px);line-height:.93;letter-spacing:-.028em;margin:18px 0 22px;text-wrap:balance}
+.hero-sub{margin:0;font-size:15px;color:var(--on-dark-2)}
+@media (min-width:721px){.hero-sub{white-space:nowrap}}
+.hero-side{width:250px;flex:none;display:grid;gap:8px}
+.hero-card{display:grid;gap:10px;padding:14px;background:rgba(14,14,13,.62);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);text-decoration:none;color:var(--on-dark)}
+.hero-card-top{display:flex;justify-content:space-between;font-size:11px;color:var(--on-dark-2)}
+.hero-card-title{font-size:14px;font-weight:500;line-height:1.3;min-height:2.6em}
+.hero-card-thumb{aspect-ratio:16/10;background:var(--night-3);position:relative;overflow:hidden}
+.hero-card-thumb img{width:100%;height:100%;object-fit:cover}
+.hero-card-thumb svg{position:absolute;right:8px;bottom:8px}
+.hero-cta{display:flex;align-items:center;justify-content:center;height:46px;background:var(--on-dark);color:var(--ink);text-decoration:none;font-size:14px;font-weight:500}
+.hero-cta:hover{background:var(--tile)}
+.fade-swap{transition:opacity .4s}
+.fade-swap.is-out{opacity:0}
+
+/* ---------- INTRO ---------- */
+.intro{padding-block:clamp(104px,14vw,190px) clamp(88px,11vw,150px);text-align:center}
+.statement{font-family:var(--f-display);font-weight:400;font-size:clamp(30px,4.5vw,66px);line-height:1.13;letter-spacing:-.018em;max-width:17.5em;margin:26px auto 0;text-wrap:balance}
+.chip{display:inline-block;width:1.7em;height:1.06em;vertical-align:-.12em;margin:0 .06em;background:var(--tile-2);overflow:hidden;border-radius:2px;position:relative}
+.chip img,.chip video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.intro{padding-bottom:clamp(56px,7vw,96px)}
+.about-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:clamp(32px,4.4vw,72px);padding-block:0 clamp(88px,11vw,150px);align-items:start}
+.about-aside{position:sticky;top:calc(var(--nav-h) + env(safe-area-inset-top,0px) + 28px);display:grid;gap:22px}
+.portrait{position:relative;aspect-ratio:4/5;max-height:min(52vh,560px);background:var(--tile);overflow:hidden}
+.portrait img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.about-lead{font-size:clamp(17px,1.35vw,19px);line-height:1.5;margin:0;letter-spacing:-.005em}
+.principles{display:grid;gap:clamp(48px,6vw,80px);padding-top:4px}
+.principle{display:grid;gap:14px;max-width:60ch;border-top:1px solid var(--rule);padding-top:24px}
+.principle h3{font-family:var(--f-display);font-weight:400;font-size:clamp(28px,3vw,44px);line-height:1.06;letter-spacing:-.02em;margin:0 0 6px;text-wrap:balance}
+.principle p{margin:0;font-size:16px;color:var(--ink-2)}
+
+/* ---------- WORK INDEX ---------- */
+.work{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(32px,6vw,104px);align-items:start;padding-block:clamp(72px,9vw,120px);border-top:1px solid var(--rule)}
+.work h2{font-family:var(--f-display);font-weight:400;font-size:clamp(38px,4.4vw,62px);line-height:1;letter-spacing:-.02em;margin:0 0 40px}
+.work-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule)}
+.work-row{display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:center;gap:8px;padding:18px 0;border-bottom:1px solid var(--rule);text-decoration:none}
+.work-row .n{font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.work-row .name{font-size:18px;font-weight:500;letter-spacing:-.01em}
+.work-row .focus{display:block;font-size:13px;color:var(--ink-2);margin-top:2px}
+.work-row svg{transition:transform .25s var(--ease)}
+.work-row:hover svg,.work-row.is-active svg{transform:translateX(4px)}
+.work-note{font-size:13px;color:var(--ink-2);margin:28px 0 0;max-width:36ch}
+.work-preview{position:relative;aspect-ratio:5/4;background:var(--tile);overflow:hidden}
+.work-preview .pv{position:absolute;inset:0;opacity:0;transition:opacity .5s ease;display:grid;place-content:center;text-align:center;gap:8px}
+.work-preview .pv.is-active{opacity:1}
+.work-preview .pv img,.work-preview .pv video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.work-preview,.work-preview .pv:nth-child(even){background:var(--paper)}
+.pv-name{font-family:var(--f-display);font-style:italic;font-size:clamp(28px,3vw,44px);letter-spacing:-.01em}
+.pv:nth-child(even){background:var(--tile-2)}
+
+/* ---------- CASE ---------- */
+.case{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:clamp(32px,4.4vw,72px);padding-block:clamp(72px,9vw,128px);border-top:1px solid var(--rule);scroll-margin-top:var(--nav-h)}
+.case-aside{min-width:0}
+.aside-inner{position:sticky;top:calc(var(--nav-h) + env(safe-area-inset-top,0px) + 28px);max-height:calc(100vh - var(--nav-h) - env(safe-area-inset-top,0px) - 48px);overflow-y:auto;scrollbar-width:none;overscroll-behavior:contain;container-type:inline-size;padding-bottom:4px}
+.aside-inner::-webkit-scrollbar{display:none}
+.kicker{display:flex;gap:14px;align-items:baseline;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);margin:0}
+.kicker .num{color:var(--ink);font-variant-numeric:tabular-nums}
+.case-title{font-family:var(--f-display);font-weight:400;font-size:clamp(36px,3.9vw,62px);line-height:1;letter-spacing:-.022em;margin:14px 0 12px;text-wrap:balance}
+.case-meta{font-size:12.5px;color:var(--ink-2);margin:0;line-height:1.5}
+.case-intro{font-size:14px;margin:18px 0 0}
+.fact{margin-top:20px}
+.fact h3{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;margin:0}
+.fact p{font-size:13.5px;line-height:1.5;margin:5px 0 0}
+.deliv{list-style:none;padding:0;margin:7px 0 0;display:grid;grid-template-columns:1fr;gap:2px 18px;font-size:13px;line-height:1.45}
+.deliv li{padding-left:1.2em;text-indent:-1.2em}
+.deliv li::before{content:"→";display:inline-block;width:1.2em;text-indent:0;color:var(--ink-3)}
+@container (min-width:330px){.deliv{grid-template-columns:1fr 1fr}}
+.jump{list-style:none;padding:0;margin:20px 0 0;border-top:1px solid var(--rule)}
+.jump a{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--rule);text-decoration:none;font-weight:500}
+.case-step{display:flex;justify-content:space-between;gap:12px;margin-top:32px;padding-top:14px;border-top:1px solid var(--rule);font-size:13px}
+.case-step a{text-decoration:none;color:var(--ink-2)}
+.case-step a:hover{color:var(--ink)}
+.case-body{display:grid;gap:clamp(72px,8vw,112px);min-width:0;align-content:start}
+
+/* group */
+.group{min-width:0}
+.group-head{display:grid;gap:8px;margin-bottom:26px;max-width:62ch}
+.group-title{font-family:var(--f-display);font-weight:400;font-size:clamp(25px,2.3vw,34px);line-height:1.08;letter-spacing:-.012em;margin:0;text-wrap:balance}
+.group-desc{margin:0;color:var(--ink-2);font-size:15px;display:grid;gap:8px}
+.group-desc p{margin:0}
+.group-note{margin:2px 0 0;font-size:13px;font-style:italic;color:var(--ink-3)}
+.tag{display:inline-block;justify-self:start;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;border:1px solid var(--ink);padding:3px 8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:4px 0 0;padding:0}
+.chips li{font-size:12px;border:1px solid var(--rule);padding:3px 9px;border-radius:999px;color:var(--ink-2)}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px 20px;align-items:start}
+.grid--2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid--wide{grid-template-columns:minmax(0,1fr)}
+.grid--feature .card{grid-column:1}
+.grid--feature .feature-text{grid-column:2/-1;align-self:center;padding-left:clamp(0px,2vw,24px)}
+.grid--feature .feature-text .group-head{margin-bottom:0}
+.grid--feature.has-open .feature-text{display:none}
+.grid--feature .card-under{display:none}
+
+/* card */
+.card{min-width:0;position:relative;scroll-margin-top:calc(var(--nav-h) + 20px)}
+.card-media{position:relative;aspect-ratio:9/16;max-width:100%;background:var(--tile);overflow:hidden;cursor:pointer;border-radius:2px;isolation:isolate}
+.card--carousel .card-media{aspect-ratio:4/5}
+.card--h .card-media{aspect-ratio:16/9}
+.card-media>video,.card-media>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.play-badge{position:absolute;left:50%;top:50%;width:54px;height:54px;margin:-27px 0 0 -27px;border-radius:50%;background:var(--scrim);display:grid;place-items:center;color:var(--on-dark);transition:opacity .25s,transform .25s var(--ease);pointer-events:none;z-index:2}
+.card-media:hover .play-badge{transform:scale(1.14);background:var(--ink)}
+.card.teasing .play-badge,.card.is-playing .play-badge{opacity:0}
+.card.is-open:not(.is-playing) .play-badge{opacity:1}
+.dur{position:absolute;left:10px;bottom:10px;font-size:11px;font-weight:500;color:var(--on-dark);background:var(--scrim);padding:2px 7px;border-radius:999px;z-index:2;font-variant-numeric:tabular-nums}
+.ph-media{position:absolute;inset:0;display:grid;place-content:center;text-align:center;gap:6px;padding:20px;color:var(--ink-2);outline:1px dashed var(--ink-3);outline-offset:-10px}
+.ph-media b{font-family:var(--f-display);font-weight:400;font-style:italic;font-size:19px;color:var(--ink);line-height:1.15}
+.ph-media small{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase}
+.teaser-bar{position:absolute;left:18px;right:18px;bottom:18px;height:2px;background:rgba(14,14,13,.14);opacity:0;transition:opacity .2s;z-index:2;overflow:hidden}
+.teaser-bar i{position:absolute;inset:0 auto 0 0;width:0;background:var(--ink)}
+.card.teasing .teaser-bar{opacity:1}
+.card.teasing .teaser-bar i{animation:teaser 4s linear infinite}
+@keyframes teaser{from{width:0}to{width:100%}}
+.card-under{padding-top:11px}
+.card-under h4{font-size:14px;font-weight:500;margin:0;letter-spacing:-.005em}
+.card-under p{font-size:13px;color:var(--ink-2);margin:4px 0 0;line-height:1.45}
+
+/* video controls (only on real videos, only when open) */
+.vctrl{position:absolute;left:0;right:0;bottom:0;z-index:3;display:none;align-items:center;gap:10px;padding:24px 12px 10px;background:linear-gradient(180deg,transparent,rgba(0,0,0,.55));color:var(--on-dark);cursor:default}
+.card.is-open .vctrl{display:flex}
+.vbtn{width:30px;height:30px;border:0;background:transparent;display:grid;place-items:center;cursor:pointer;flex:none;color:var(--on-dark)}
+.vprog{flex:1;min-width:0;accent-color:var(--on-dark);height:3px;cursor:pointer}
+.vtime{font-size:11px;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* carousel */
+.car-track{display:flex;height:100%;transition:transform .45s var(--ease);touch-action:pan-y;will-change:transform}
+.car.dragging .car-track{transition:none}
+.car.dragging{cursor:grabbing}
+.slide{flex:0 0 100%;position:relative;height:100%;user-select:none;-webkit-user-select:none}
+.slide img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
+.slide:nth-child(even) .ph-media{background:var(--tile-2)}
+.car-pill{position:absolute;top:10px;right:10px;z-index:3;display:flex;align-items:center;gap:5px;height:24px;padding:0 8px;border-radius:999px;background:var(--scrim);color:var(--on-dark);font-size:11px;font-weight:500;font-variant-numeric:tabular-nums}
+.car-pill .count{display:none}
+.car:hover .car-pill .count,.card.is-open .car-pill .count,.car:focus-within .car-pill .count{display:inline}
+.car:hover .car-pill svg,.card.is-open .car-pill svg,.car:focus-within .car-pill svg{display:none}
+.car-btn{position:absolute;top:50%;z-index:3;width:32px;height:32px;margin-top:-16px;border-radius:50%;border:0;background:rgba(255,255,255,.94);color:var(--ink);display:grid;place-items:center;cursor:pointer;opacity:0;transition:opacity .2s,transform .2s;box-shadow:0 1px 5px rgba(0,0,0,.18)}
+.car-btn:hover{transform:scale(1.06)}
+.car-btn.prev{left:10px}
+.car-btn.next{right:10px}
+.car:hover .car-btn,.card.is-open .car-btn,.car:focus-within .car-btn{opacity:1}
+.car-btn[disabled]{opacity:0!important;pointer-events:none}
+.car-dots{position:absolute;left:0;right:0;bottom:12px;z-index:3;display:flex;justify-content:center;gap:5px;pointer-events:none}
+.car-dots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.55);box-shadow:0 0 0 .5px rgba(0,0,0,.25);transition:background .2s,transform .2s}
+.car-dots i.on{background:var(--on-dark);transform:scale(1.15)}
+@media (hover:none){.car-btn{display:none}}
+
+/* open state */
+.card.is-open{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,min(46%,calc((100svh - 150px) * .5625))) minmax(0,1fr);gap:clamp(24px,3vw,48px);align-items:start}
+.card--carousel.is-open{grid-template-columns:minmax(0,min(56%,calc((100svh - 150px) * .8))) minmax(0,1fr)}
+.card--h.is-open{grid-template-columns:minmax(0,1fr)}
+.card.is-open .card-under{display:none}
+.card-panel{display:none}
+.card.is-open .card-panel{display:grid;gap:20px;align-content:start;animation:panelIn .45s .18s var(--ease) both}
+@keyframes panelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.panel-top{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--rule)}
+.close{border:1px solid var(--ink);background:transparent;height:32px;padding:0 14px;border-radius:999px;font-size:12px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.close:hover{background:var(--ink);color:var(--paper)}
+.panel-title{font-family:var(--f-display);font-weight:400;font-size:clamp(26px,2.4vw,36px);line-height:1.05;letter-spacing:-.015em;margin:0}
+.panel-desc{margin:0;font-size:15px;max-width:56ch}
+.field h5{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;margin:0 0 5px;color:var(--ink-2)}
+.field p{margin:0;font-size:14.5px;max-width:56ch}
+.ph-text{color:var(--ink-3)!important;font-style:italic}
+.slide-note{border:1px solid var(--rule);padding:14px 16px;display:grid;gap:6px}
+.slide-note .eyebrow{font-variant-numeric:tabular-nums}
+.slide-note p{margin:0;font-size:14.5px}
+
+/* gallery (static images) */
+.gallery{columns:3;column-gap:20px}
+.gallery .card{break-inside:avoid;margin:0 0 26px;display:block}
+.gallery .card-media{cursor:default}
+.gallery figcaption{font-size:13px;color:var(--ink-2);padding-top:9px}
+
+/* impact */
+.impact{background:var(--night);color:var(--on-dark);padding:clamp(32px,5vw,64px);display:grid;gap:10px}
+.impact .eyebrow{color:var(--on-dark-2)}
+.stat{font-family:var(--f-display);font-weight:400;font-size:clamp(88px,11vw,176px);line-height:.88;letter-spacing:-.035em;margin:14px 0 4px}
+.stat-label{font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;margin:0}
+.impact-text{max-width:54ch;color:var(--on-dark-2);margin:10px 0 0}
+.impact .ph-text{color:rgba(255,255,255,.45)!important;border-top:1px dashed rgba(255,255,255,.25);padding-top:14px;margin-top:14px;font-size:14px}
+
+/* about */
+.about{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:clamp(32px,4.4vw,72px);padding-block:clamp(96px,12vw,160px);align-items:start}
+.portrait-quote{position:relative;margin:0;aspect-ratio:4/5;overflow:hidden;background:var(--tile)}
+.portrait-quote img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.portrait-quote blockquote{position:absolute;left:0;right:0;bottom:0;z-index:1;margin:0;padding:clamp(18px,2.2vw,28px);color:var(--on-dark)}
+.portrait-quote blockquote p{margin:0;font-family:var(--f-display);font-size:clamp(22px,2.1vw,32px);line-height:1.12;letter-spacing:-.015em;text-wrap:balance}
+.portrait-quote cite{display:block;margin-top:12px;font-style:normal;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--on-dark-2)}
+.about-body{display:grid;gap:22px;align-content:start;max-width:64ch}
+.about-body .about-lead{font-size:clamp(19px,1.6vw,23px);line-height:1.45;letter-spacing:-.008em;margin:0}
+.about-links{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;margin:0;font-size:14px}
+.about-links a{text-decoration:underline;text-underline-offset:3px}
+.about-links a[aria-disabled="true"]{text-decoration-style:dashed;color:var(--ink-2)}
+.about-links span{color:var(--ink-3)}
+.about .principles{gap:28px;padding-top:6px}
+.about .principle{gap:8px;padding-top:20px}
+.about .principle h3{font-family:var(--f-sans);font-size:16px;font-weight:600;letter-spacing:-.005em;line-height:1.4;margin:0}
+.about .principle p{font-size:15.5px}
+.kicker .affil{color:var(--ink-3)}
+.about-hello{font-family:var(--f-display);font-weight:400;font-size:clamp(36px,3.9vw,62px);line-height:1;letter-spacing:-.022em;text-transform:none;color:var(--ink);text-wrap:wrap;display:flex;flex-wrap:wrap;align-items:baseline;column-gap:14px;row-gap:6px}
+.about-hello span{font-family:var(--f-sans);text-transform:none;letter-spacing:.02em;font-size:13px;line-height:1.2;color:var(--ink-3);font-weight:500;margin-left:0;white-space:nowrap}
+
+/* caption under media when open; insights + results on the right */
+.card-cap{display:none}
+.card.is-open .card-cap{display:block;grid-column:1;grid-row:2;padding-top:4px}
+.card.is-open .card-media{grid-column:1;grid-row:1}
+.card.is-open .card-panel{grid-column:2;grid-row:1 / span 2}
+.card--h.is-open .card-cap,.card--h.is-open .card-panel{grid-column:1;grid-row:auto}
+.card-cap h5{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;margin:0 0 5px;color:var(--ink-2)}
+.card-cap p{margin:0;max-width:60ch}
+.card-cap .cap-text{font-size:12.5px;line-height:1.6;color:var(--ink-2);letter-spacing:.005em;border-left:2px solid var(--rule);padding-left:12px}
+.card-cap .cap-text.ph-text{border-left:0;padding-left:0}
+.card-cap .cap-title{font-size:13.5px;font-weight:600;color:var(--ink);margin:0 0 8px;padding-left:14px}
+.stats{display:grid;grid-template-columns:repeat(var(--cols,3),minmax(0,1fr));gap:1px;margin:6px 0 0;background:var(--rule);border:1px solid var(--rule)}
+.stats div{background:var(--paper);padding:12px 12px 10px;display:grid;gap:2px}
+.stats dd{margin:0;font-family:var(--f-display);font-size:clamp(22px,1.9vw,28px);line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stats dt{font-size:11.5px;color:var(--ink-2)}
+.stats dt.vs{font-size:10.5px;font-weight:600;color:var(--ink);letter-spacing:.01em;margin-top:2px}
+.ig-cta{display:inline-flex;align-items:center;gap:8px;justify-self:start;height:42px;padding:0 20px;border-radius:999px;background:var(--ink);color:var(--paper);font-size:13.5px;font-weight:500;text-decoration:none;transition:opacity .2s}
+.ig-cta:hover{opacity:.82}
+.group-stats{margin-top:22px;padding-top:16px;border-top:1px solid var(--rule);display:grid;gap:8px}
+.group-stats .ph-text{margin:0;font-size:14px}
+.stats-text{margin:0;font-size:14px;color:var(--ink-2);max-width:60ch}
+.group-stats .stats{margin-top:6px;--cols:6}
+@media (max-width:1240px){.group-stats .stats{--cols:3}}
+.ig-link{text-decoration:none;border-bottom:1px solid var(--ink);padding-bottom:1px}
+.ig-link:hover{border-bottom-width:2px}
+.ig-link.is-fpo{border-bottom-style:dashed;border-bottom-color:var(--ink-3)}
+.fpo-tag{display:inline-block;margin-left:8px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);border:1px dashed var(--ink-3);padding:1px 5px;vertical-align:2px}
+.card--inline.is-live .play-badge{opacity:0}
+.grid--feature-h{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid--feature-h .feature-text{grid-column:2}
+
+/* account highlight in the sticky column */
+.acct{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;margin:18px 0 0;background:var(--rule);border:1px solid var(--rule)}
+.acct div{background:var(--paper);padding:10px 12px;display:grid;gap:2px}
+.acct dd{margin:0;font-family:var(--f-display);font-size:clamp(18px,1.65vw,24px);white-space:nowrap;line-height:1.05;letter-spacing:-.015em}
+.acct dt{font-size:11.5px;color:var(--ink-2)}
+.ig-line{display:inline-block;margin-top:10px;margin-left:14px;font-size:11px;color:var(--ink-3);text-decoration:underline;text-decoration-color:var(--rule);text-underline-offset:2px}
+.ig-line:hover{color:var(--ink-2);text-decoration-color:var(--ink-3)}
+.feature-text .ig-line{margin-top:16px}
+
+/* impact with footage */
+.impact--split{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(24px,3.5vw,48px);align-items:center}
+.impact-copy{display:grid;gap:10px;align-content:center}
+.impact-headline{font-family:var(--f-display);font-size:clamp(30px,3.2vw,46px);line-height:1.08;letter-spacing:-.02em;margin:12px 0 4px;text-wrap:balance}
+.plus{font-size:.6em;vertical-align:.32em;margin-left:.02em}
+.impact-media{position:relative;aspect-ratio:16/9;overflow:hidden;background:var(--night-2)}
+.impact-media--tall{aspect-ratio:4/5;max-height:76vh;justify-self:center;width:100%}
+.seq{position:absolute;inset:0;margin:0;opacity:0;transition:opacity 1.1s ease}
+.seq.on{opacity:1}
+.seq video,.seq img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.seq--contain img{object-fit:contain;background:var(--night)}
+/* stat-led impact beside media: scale the number to sit alongside the MCC headline, and stack before it gets cramped */
+.impact--split .stat{font-size:clamp(56px,5.4vw,92px);line-height:.9;margin:12px 0 4px}
+.impact--split .impact-text{font-size:14.5px}
+@media (max-width:1240px){
+  .impact--split{grid-template-columns:minmax(0,1fr)}
+  .impact-media--tall{max-width:380px;justify-self:start}
+}
+
+/* 4-up + spans */
+.grid--4{grid-template-columns:repeat(4,minmax(0,1fr));gap:26px 14px}
+.grid .span-2{grid-column:span 2}
+.grid .card--image .card-media{cursor:default}
+.grid figure.card{margin:0}
+.grid figcaption{font-size:14px;font-weight:500;padding-top:11px}
+.slide video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
+.portrait img{display:block}
+
+/* community response: dark collage */
+.voices{background:var(--night);color:var(--on-dark);padding:clamp(28px,4.5vw,56px);display:grid;gap:28px}
+.voices .eyebrow{color:var(--on-dark-2)}
+.voices .group-title{color:var(--on-dark)}
+.voices-head{display:grid;gap:8px}
+.voices-grid{columns:2;column-gap:16px}
+.voice{break-inside:avoid;margin:0 0 16px;padding:22px;border:1px solid rgba(255,255,255,.16);display:grid;gap:14px;opacity:0;transform:translateY(12px);transition:opacity .7s ease,transform .7s var(--ease)}
+.voice.in{opacity:1;transform:none}
+.voice blockquote{margin:0;font-family:var(--f-display);font-size:19px;line-height:1.32;letter-spacing:-.005em}
+.voice--big blockquote{font-size:clamp(22px,2.1vw,28px);line-height:1.22}
+.voice img{width:100%;display:block;filter:grayscale(.15) contrast(1.05)}
+.voice--img blockquote{font-size:16px;font-family:var(--f-sans);color:var(--on-dark-2)}
+.voice figcaption{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;font-size:12.5px}
+.voice figcaption b{font-weight:600}
+.voice figcaption span{color:var(--on-dark-2)}
+@media (max-width:720px){.voices-grid{columns:1}}
+@media (prefers-reduced-motion:reduce){.voice{opacity:1;transform:none}}
+
+/* testimonials */
+.quotes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.quote{border:1px dashed var(--ink-3);padding:22px;min-height:180px;display:grid;align-content:space-between;gap:16px;color:var(--ink-3)}
+.quote p{margin:0;font-family:var(--f-display);font-style:italic;font-size:19px;line-height:1.3}
+.quote small{font-size:12px}
+
+/* sub-project heading (campaigns) */
+.subhead{border-top:1px solid var(--ink);padding-top:22px;display:grid;gap:10px;scroll-margin-top:calc(var(--nav-h) + 20px)}
+.subhead-name{font-family:var(--f-display);font-weight:400;font-size:clamp(38px,4.6vw,64px);line-height:1;letter-spacing:-.025em;margin:0}
+.subhead-title{font-size:18px;font-weight:500;margin:6px 0 0;letter-spacing:-.01em}
+.subhead-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 32px;container-type:inline-size}
+.subhead-facts .fact-deliv{grid-column:1/-1}
+.subhead-facts .deliv{grid-template-columns:repeat(3,minmax(0,1fr))}
+
+/* closing */
+.closing{background:var(--night);color:var(--on-dark);padding-block:clamp(104px,13vw,180px) 40px}
+.closing .eyebrow{color:var(--on-dark-2)}
+.closing h2{font-family:var(--f-display);font-weight:400;font-size:clamp(46px,7.4vw,116px);line-height:.95;letter-spacing:-.03em;margin:24px 0 40px;max-width:12em;text-wrap:balance}
+.closing-grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(32px,6vw,96px);align-items:end}
+.closing-body{display:grid;gap:14px;color:var(--on-dark-2);font-size:16px;max-width:56ch}
+.closing-body p{margin:0}
+.sig{display:grid;gap:18px}
+.sig-name{font-family:var(--f-display);font-size:30px;margin:0;letter-spacing:-.01em}
+.sig-role{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--on-dark-2);margin:4px 0 0}
+.email-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding-top:18px;border-top:1px solid rgba(255,255,255,.2)}
+.email{font-size:clamp(18px,1.8vw,22px);user-select:all;-webkit-user-select:all;word-break:break-all}
+.copy{border:1px solid rgba(255,255,255,.5);background:transparent;color:var(--on-dark);height:32px;padding:0 14px;border-radius:999px;font-size:12px;cursor:pointer}
+.copy:hover{background:var(--on-dark);color:var(--ink)}
+.contact-more{list-style:none;margin:0;padding:0;display:grid;gap:10px;font-size:15px}
+.contact-more li{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.cm-label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--on-dark-2);min-width:72px}
+.contact-more a{text-decoration:none;border-bottom:1px solid rgba(255,255,255,.4);padding-bottom:1px}
+.contact-more a:hover{border-bottom-color:var(--on-dark)}
+.foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:clamp(80px,10vw,140px);padding-top:18px;border-top:1px solid rgba(255,255,255,.14);font-size:12px;color:var(--on-dark-2)}
+.foot a{text-decoration:none}
+
+/* cursor pill + draft switch */
+.cursor{position:fixed;left:0;top:0;z-index:80;pointer-events:none;display:flex;align-items:center;gap:9px;background:var(--ink);color:var(--paper);font-size:13.5px;font-weight:600;letter-spacing:.005em;padding:11px 18px 11px 14px;border-radius:999px;box-shadow:0 6px 22px rgba(0,0,0,.28);opacity:0;transition:opacity .15s;white-space:nowrap}
+.cursor::before{content:"";width:0;height:0;border-left:9px solid currentColor;border-top:6px solid transparent;border-bottom:6px solid transparent}
+.cursor.show{opacity:1}
+.cursor.no-icon::before{display:none}
+.cursor.no-icon{padding-left:18px}
+.draft{position:fixed;z-index:60;left:max(16px,calc(env(safe-area-inset-left,0px) + 16px));bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:8px;background:var(--ink);color:var(--paper);border:1px solid rgba(255,255,255,.25);height:34px;padding:0 14px;border-radius:999px;font-size:12px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.draft i{width:8px;height:8px;border-radius:50%;background:#e9c46a}
+body.published .draft i{background:#7bc47f}
+body.published .ph{display:none!important}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width:1040px){
+  .case,.about-split,.about{grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:32px}
+  .grid,.grid--4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid--feature{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid--feature .feature-text{grid-column:2}
+  .gallery{columns:2}
+  .quotes{grid-template-columns:minmax(0,1fr)}
+  .work{grid-template-columns:minmax(0,1fr)}
+  .work-preview{display:none}
+}
+@media (max-width:760px){
+  .case,.about-split,.about,.impact--split{grid-template-columns:minmax(0,1fr)}
+  .portrait-quote{max-width:440px}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .aside-inner,.about-aside{position:static;max-height:none;overflow:visible}
+}
+@media (max-width:720px){
+  :root{--gut:16px;--nav-h:54px}
+  .hero{min-height:560px;height:88svh}
+  .hero-inner{flex-direction:column;align-items:stretch}
+  .hero-copy{max-width:100%}
+  .hero-side{width:100%}
+  .hero-card{display:none}
+  .grid,.grid--4{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 12px}
+  .grid--2,.grid--wide{grid-template-columns:minmax(0,1fr)}
+  .grid--feature{grid-template-columns:minmax(0,1fr)}
+  .grid--feature .card{max-width:340px}
+  .grid--feature .feature-text{grid-column:1;padding-left:0}
+  .card.is-open,.card--carousel.is-open{grid-template-columns:minmax(0,1fr)}
+  .card.is-open .card-media{width:min(100%,calc((100svh - 140px) * .5625));margin-inline:auto}
+  .card--carousel.is-open .card-media{width:100%}
+  .card--h.is-open .card-media{width:100%}
+  .card.is-open .card-cap{grid-column:1;grid-row:2}
+  .card.is-open .card-panel{grid-column:1;grid-row:3}
+  .card-cap .cap-text{max-width:none}
+  .gallery{columns:2;column-gap:12px}
+  .quotes{grid-template-columns:minmax(0,1fr)}
+  .subhead-facts{grid-template-columns:minmax(0,1fr)}
+  .subhead-facts .deliv{grid-template-columns:1fr 1fr}
+  .closing-grid{grid-template-columns:minmax(0,1fr)}
+  .statement .chip{width:1.4em}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+
+
+<header class="nav gutter on-hero" id="nav">
+  <a class="brand" href="#top">Emiri Miyaji</a>
+  <ul class="nav-links" id="navLinks"><li><a href="#about" data-sec="about">About</a></li><li><a href="#work" data-sec="work">My Work</a></li><li><a href="#contact" data-sec="contact">Contact</a></li></ul>
+</header>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero" id="hero" aria-label="Introduction">
+    <div id="heroClips"></div>
+    <div class="hero-scrim"></div>
+    <div class="hero-inner gutter">
+      <div class="hero-copy">
+        <h1>Stories That <em>Connect</em> People.</h1>
+        <p class="hero-sub">Selected works by Emiri Miyaji, presented for consideration for the Digital Engagement Specialist position at Hawaiʻi Appleseed.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about gutter" id="about" aria-labelledby="aboutLabel">
+    <figure class="portrait-quote">
+      <img src="media/img/about-portrait.jpg" alt="Portrait of Emiri Miyaji">
+    </figure>
+    <div class="about-body">
+      <p class="eyebrow about-hello" id="aboutLabel">Aloha, my name is Emiri! <span>(pronounced em-er-ee)</span></p>
+      <p class="about-lead">I’m a multidisciplinary creative combining social media strategy, design, and hands-on production to turn online attention into real-world action. My experience with nonprofits, close-knit agencies, and small businesses has made me a creative Swiss Army knife—adaptable, resourceful, and always looking for ways to work smarter and communicate better.</p>
+      <p class="about-links"><a href="https://www.linkedin.com/in/emiri-miyaji-316389279/" target="_blank" rel="noopener">LinkedIn</a><span aria-hidden="true">·</span><a href="https://www.emirimiyaji.com/" target="_blank" rel="noopener">Graphic Design Portfolio</a></p>
+      <div class="principles">
+        <article class="principle">
+          <h3>The best stories begin with humility.</h3>
+          <p>As a lifelong student at heart, I believe inspiration can come from just about anywhere, and every interaction is an opportunity to learn something new.</p>
+          <p>I’m naturally drawn to discovering what makes people unique. Once I find it, my mind goes straight to the possibilities: How can I bring this to light? That same instinct carries into teamwork, where I enjoy recognizing what each person brings to the table and finding smarter ways to make those strengths work together.</p>
+          <p>I approach every project with an open mind, thoughtful questions, and a genuine desire to make people feel comfortable and heard. Because I’ve found that the most compelling stories emerge when people feel free to be themselves.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK INDEX -->
+  <section class="work gutter" id="work" aria-labelledby="workTitle">
+    <div>
+      <h2 id="workTitle">Selected <em>work</em></h2>
+      <ul class="work-list" id="workList"></ul>
+    </div>
+    <div class="work-preview" id="workPreview" aria-hidden="true"></div>
+  </section>
+
+  <!-- CASE STUDIES -->
+  <div id="cases"></div>
+</main>
+
+<!-- CLOSING -->
+<footer class="closing gutter" id="contact">
+  <p class="eyebrow">Contact</p>
+  <h2>Good Creative Starts With <em>People</em>.</h2>
+  <div class="closing-grid">
+    <div class="closing-body">
+      <p>From documenting a 50-year creative legacy to turning online views into lines at event doors, my work is driven by curiosity and an appreciation for what makes people and their stories unique.</p>
+      <p>Through strategy, design, and hands-on production, I bring those stories to life in ways that move people and bring communities together.</p>
+    </div>
+    <div class="sig">
+      <div>
+        <p class="sig-name">Emiri Miyaji</p>
+        <p class="sig-role">Social Media Strategy · Digital Engagement · Creative Production</p>
+      </div>
+      <div class="email-row">
+        <span class="email" id="email">design@emirimiyaji.com</span>
+        <button class="copy" id="copyEmail" type="button">Copy email</button>
+      </div>
+      <ul class="contact-more">
+        <li><span class="cm-label">Phone</span><a href="tel:+18083998146">808-399-8146</a></li>
+        <li><span class="cm-label">LinkedIn</span><a href="https://www.linkedin.com/in/emiri-miyaji-316389279/" target="_blank" rel="noopener">linkedin.com/in/emiri-miyaji</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot">
+    <span>© 2026 Emiri Miyaji · Honolulu</span>
+    <a href="#top">Back to top ↑</a>
+  </div>
+</footer>
+
+<div class="cursor" id="cursor" aria-hidden="true">Play</div>
+<button class="draft" id="draftToggle" type="button" aria-pressed="false"><i></i><span>Placeholders shown</span></button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.20/hls.min.js"></script>
+<script>
+/* ============================================================
+   CONTENT — edit here. Add `src` (and `poster`) to replace a placeholder.
+   Video:    { kind:'video', title, src, poster, teaser:[startSec,endSec], orient:'h' for 16:9 }
+   Carousel: { kind:'carousel', title, slides:[{src, note}] }  or  slides: 6  for placeholders
+   Image:    { kind:'image', title, src, aspect:'4/5' }
+   Optional on video/carousel: caption, insights, results (shown when a card is opened)
+   ============================================================ */
+const SHOW_DRAFT_SWITCH = false;   // set false before sending the link
+
+const HERO = [
+  { src:'media/hero/hero-canehaul.mp4', poster:'media/hero/hero-canehaul.jpg' }
+];
+
+const V = s => ({ src:`media/v/${s}.mp4`, poster:`media/v/${s}.jpg` });
+const IMG = s => `media/img/${s}.jpg`;
+const IG = id => `https://www.instagram.com/p/${id}/`;
+
+/* Captions as posted on Instagram */
+const CAP = {
+  temariAbout:`Trash & Treasure is back October 25th! After 42 years, there’s a reason people keep showing up.
+
+Our one-day market brings together juried local artists, serious craftsmanship, vintage and pre-loved finds, and plenty of unexpected treasures.
+
+Whether you’re shopping for Christmas, hunting for a designer score, or just want to see what 35+ invited makers are bringing this year, there’s plenty worth showing up for.
+
+✨ TEMARI MEMBERS: 8:00–9:00 AM
+Get early access + enjoy special member perks, with more details coming soon!
+
+✨ PUBLIC: 9:00 AM–1:00 PM
+
+📍 McKinley High School Cafeteria
+🚗 Free parking via the Pensacola Street entrance
+
+#TrashAndTreasure #TemariHawaii #HonoluluEvents #HawaiiMakers`,
+  temariGkt:`One person’s trash is another person’s TREASURE. 👀
+And trust us, there’s plenty to discover at our Good Kine Trash table!
+
+From beautiful pottery to pre-loved designer finds from Sig Zane, Nakeʻu Awai, Issey Miyake, Eileen Fisher, Allison Izu, and more, this isn’t your average secondhand shopping experience.
+
+Want first dibs? Temari members get exclusive early access from 8–9 AM! Not a member yet? There’s still time to join through the link in our bio.
+
+📍 Trash & Treasure | McKinley High School Cafeteria
+🗓 Sunday, October 25
+⏰ Members: 8–9 AM | Public: 9 AM–1 PM
+Happy treasure hunting! 🛍️
+
+#TrashAndTreasure #TemariHawaii #ShopLocalHawaii #HawaiiThrifting #VintageHawaii HonoluluEvents`,
+  temariHandmade:`Human made is the new luxury.
+
+A big mahalo to our talented invited artists for sharing their creativity and craftsmanship at our 42nd Trash & Treasure Fair!
+
+Feeling inspired? Create something of your own alongside fellow creatives at our temari workshops. Stay tuned for upcoming classes and become a member through the link in our bio.
+
+#TemariHawaii #TrashAndTreasure #HandmadeInHawaii`,
+  temariSwipe:`Move your thumb to the beat for a sneak peek at what’s waiting for you at Trash & Treasure (our annual fair held Sunday, October 25th) 👀✨
+
+Shop one-of-a-kind goods from a juried lineup of local makers and artists. Start a membership and get early access!
+✨ TEMARI MEMBERS: 8:00–9:00 AM Get early access + enjoy special member perks, with more details to be announced soon! ✨ PUBLIC: 9:00 AM–1:00 PM 📍 McKinley High School Cafeteria 🚗 Free parking via the Pensacola Street entrance
+
+#trashandtreasure #temarihawaii #honolulucraftfair #hawaiievents`,
+  temariVendor:`Meet the invited artists, Pt. 2! 🎨
+
+We’re back with another round of talented creatives bringing their one-of-a-kind finds to Trash & Treasure this Sunday!
+
+Swipe to meet the artists, and come see their work in person! 👉
+
+📅 Sunday, October 25 ⏰ 9 AM–1 PM (Temari Members: 8–9 AM) 📍 McKinley High School Cafeteria
+
+Visit our link in bio to become a member and experience all the perks at T&T!
+
+#TemariHawaii #TrashAndTreasure2026 #HawaiiArtists #ShopLocalHawaii
+
+One-of-a-kind bags and earrings crafted from vintage kimono fabrics and hand-stitched leather by @kimonomegumi 🌸
+
+A little whimsy for your everyday! ✨ Explore handmade art and functional décor designed to bring joy into your home by @jenniferfujimoto
+
+Tattoo-inspired art beyond the skin. Check out @akemi.mono ‘s designs on tees, wood, and paper goods.
+
+Where ceramics meet storytelling. Discover playful ceramics and picture book illustrations by @heybeachcake
+
+Five decades of celebrating Hawaiʻi’s stories! 🌺 Explore @canehaulroad for goods that capture local Hawai’i culture.`,
+  pwNoah:`What makes Prince Waikiki special, straight from our Director of Front Office, Noah Goss. ✨
+
+What’s your favorite thing about Prince Waikiki? Tell us below. 👇
+
+#PrinceWaikiki #Waikiki #Oahu #WaikikiHotel #HawaiiVacation`,
+  pwBrooke:`Behind every great meal is a memory, a tradition, or someone it was made for.
+
+For Father’s Day, we sat down with Executive Chef Brooke Tadena for a conversation about food, family, and the people who shape the way we care for others.
+
+Those experiences helped shape his culinary journey and continue to inspire the care he brings to every dish served at 100 Sails Restaurant & Bar, where high-quality seafood is at the heart of the menu.
+
+#PrinceWaikiki #FathersDay #100Sails`,
+  pwDetails:`The Art of Details.
+
+Throughout Prince Waikiki, meaningful details are woven into the property, each one reflecting the people, place, and stories that shape the hotel.
+
+Suspended above the lobby, a school of hīnana is formed from individual pieces bearing the fingerprints of Prince Waikiki employees and guests. Together, they create a quiet yet lasting reminder that our team is part of everything we are.
+
+#PrinceWaikiki #TheArtOfDetails #HawaiiDesign #WaikikiHotel #HawaiiArt`,
+  pwGirls:`A girls’ night staycation at Prince Waikiki means harbor views from your room, sunset drinks, and time set aside for catching up and unwinding the way you deserve.
+
+Our Kamaʻāina Sizzling Summer Staycation offer is available now via the link in bio. Robes on, champagne poured, skincare ready.
+
+The kind of summer reset you don’t have to leave the island for.
+
+#PrinceWaikiki #Staycation #Waikiki #HawaiiTravel`,
+  pwClub:`The upgrade that changes the whole trip.
+
+Book a Club Room and you get keyed access to our private oceanfront Club Lounge with unlimited wine and beer, daily breakfast, evening bites, and a terrace facing the Pacific. It's not just a better room. It's a completely different way to stay.
+
+Club Premier Oceanfront Rooms from 30% off for Seibu Prince Global Rewards members. Link in bio. 🌊
+
+#PrinceWaikiki #HawaiiTravel #ClubLounge`,
+  pwDay:`Spend a day with us at Prince Waikiki.
+
+Check in, settle into your room, wander a little, stay for sunset, and see where the night takes you.
+
+No itinerary needed.`,
+  kuonoHunt:`👀🎃 THE HALLOWEEN HUNT IS ON at Kūʻono Marketplace! 🎃👀
+
+Starting NOW, pumpkins are hidden throughout Kūʻono Marketplace, and some come with a little extra treat! 🎁 Select pumpkins include $25 gift cards from participating Kūʻono businesses or free drink coupons from @coffeebeanteaandleaf!
+Here’s how to play:
+
+🔎 Explore the marketplace and keep an eye out for hidden pumpkins.
+🎃 Spot one? Check underneath to see if you’ve scored a prize!
+✨ Finders, keepers! Pumpkins are available only while supplies last.
+
+A little reminder to mālama pono! 🌿Please respect the property and its landscaping while you hunt. Pumpkins will NOT be hidden inside businesses or deep within gardening, so there’s no need to step into planted areas and disturb the greenery. Let’s keep Kūʻono beautiful for everyone to enjoy! 💚
+Happy hunting, and good luck! 👻
+
+4210 Wai‘alae Avenue
+Honolulu, HI 96816
+
+#KuonoMarketplace #HalloweenAtKuono #HalloweenOahu #OahuEvents`,
+  seraOpen:`Introducing SERA! This new coastal Mediterranean concept marks a fresh chapter for @renaissancehonolulu’s signature dining space, offering a distinct culinary identity shaped by seasonal ingredients, global influence and bold flavors.
+
+Same great location. New flavors to explore. Come in and experience the new SERA.
+
+SERA customers receive free valet all day, including breakfast, lunch and dinner.
+
+#SERA #MediterraneanCuisine #HonoluluHawaii #Launch`
+};
+
+const CASES = [
+{
+  id:'temari', num:'01', client:'Temari Hawaiʻi', affil:'Freelance', navShort:'Temari', cover:IMG('thumb-temari'),
+  focus:'Social media strategy · Audience development · Event promotion',
+  title:'Reintroducing a <em>Beloved</em> Annual Fair',
+  meta:'Trash & Treasure Fair<br>Social Media Strategy, Audience Development, and Event Promotion',
+  account:[['Since July 2025','Managing Temari’s Instagram'],['+76.1%','Follower growth']],
+  challenge:'With over four decades of history, Trash & Treasure had a loyal following, but its reach was largely limited to existing members and older audiences. The goal was to introduce a younger generation to the fair while preserving its handmade charm, cultural significance, and longstanding community relationships.',
+  approach:'Develop a social media strategy blending storytelling, relevant trends, and custom design to spotlight the fair’s juried artisans, vintage treasures, and vibrant community of makers. Position Trash & Treasure as more than a craft fair: a cultural experience celebrating craftsmanship, an opportunity to discover one-of-a-kind finds, and a meaningful way to support local artists and makers, including those who may not have a large online following.',
+  deliverables:['Social Media Strategy & Content Planning','Art Direction','Content Capture & Video Production','Motion Design','Social Media Graphics','Photography & Retouching','Hand Modeling'],
+  blocks:[
+    { type:'group', layout:'feature', eyebrow:'Storytelling', title:'Introducing Trash & Treasure',
+      desc:['A traditional event announcement wasn’t enough for an audience unfamiliar with the fair.','I created an introductory carousel explaining the event’s history, its character, and why generations of attendees keep coming back.'],
+      items:[{ kind:'carousel', title:'About Trash & Treasure', ig:IG('DeLY9tuFIxC'), caption:CAP.temariAbout,
+        insights:'82% of viewers weren’t following Temari yet, and the post was shared 481 times and saved 243 times.',
+        results:[['31,390','Views'],['17,096','Accounts reached'],['481','Shares'],['243','Saves'],['153','New follows'],['82%','Non-followers']],
+        slides:[
+        { video:'media/v/temari-about-1.mp4', poster:'media/v/temari-about-1.jpg' },
+        { src:IMG('temari-about-2') },
+        { video:'media/v/temari-about-3.mp4', poster:'media/v/temari-about-3.jpg' },
+        { video:'media/v/temari-about-4.mp4', poster:'media/v/temari-about-4.jpg' },
+        { src:IMG('temari-about-5') }
+      ]}] },
+    { type:'group', layout:'feature', eyebrow:'Storytelling', title:'Good Kine Trash',
+      desc:['Reframed the fair’s curated secondhand table as a one-of-a-kind vintage treasure hunt.','From designer finds to handcrafted pottery, the content highlighted discoveries that set Trash & Treasure apart from typical thrift stores and swap meets.'],
+      items:[{ kind:'video', title:'Good Kine Trash', ...V('temari-good-kine-trash'), teaser:[9,13], ig:IG('De2UTFtBO0q'), caption:CAP.temariGkt,
+        insights:'The strongest performer of the campaign. Nearly all viewers (95.7%) were new to the account, and 43% were between 25 and 44, a younger audience than the fair’s core following.',
+        results:[['40,330','Views'],['29,658','Accounts reached'],['1K','Shares'],['302','Saves'],['305','New follows'],['16s','Avg. watch time']] }] },
+    { type:'group', layout:'grid', eyebrow:'Tasteful trends', title:'Trending formats, used with intent',
+      items:[
+        { kind:'video', title:'Angel of My Dreams', ...V('temari-angel'), desc:'Used a humorous trending format to show the personality behind the nonprofit and the people who make Temari special.',
+          insights:'The most-commented post of the campaign. 85.9% of viewers were non-followers.',
+          results:[['23,227','Views'],['12,063','Accounts reached'],['654','Likes'],['27','Comments'],['45','Shares'],['86%','Non-followers']] },
+        { kind:'video', title:'Handmade Is the New Luxury', ...V('temari-handmade'), desc:'Used a relevant trend to celebrate participating artisans and position handmade craftsmanship as worth investing in.', teaser:[20,24], ig:IG('DfEIc0uO2dC'), caption:CAP.temariHandmade,
+          insights:'Resonated most with Temari’s existing community: 35.8% of viewers already followed the account, with a 13-second average watch time.',
+          results:[['2,654','Views'],['1,789','Accounts reached'],['123','Likes'],['13s','Avg. watch time'],['11','New follows']] },
+        { kind:'video', title:'Interactive Sneak Peek', ...V('temari-swipe'), desc:'Adapted a fast-paced, pseudo-interactive trend to preview the fair’s offerings for younger, digitally native audiences.', ig:IG('DePosQpzDS-'), caption:CAP.temariSwipe,
+          insights:'A fast, pseudo-interactive preview of the vendors: viewers watched for 9 seconds on average, and the Reel was shared 9 times and saved 6 times.',
+          results:[['2,371','Views'],['1,428','Accounts reached'],['60','Likes'],['9','Shares'],['6','Saves'],['9s','Avg. watch time']] }
+      ] },
+    { type:'group', layout:'feature', eyebrow:'Bespoke design', title:'Vendor Spotlights',
+      desc:['I designed and animated each cover slide to keep the feed interesting.','I also art directed subcontractor Nicole Sato by sharing Temari’s brand identity and revising the work to reach our target audiences. The carousel design ran across four posts calling out the fair’s invited artists.'],
+      items:[{ kind:'carousel', title:'Meet the Invited Artists', ig:IG('DevpoJbmxZg'), caption:CAP.temariVendor,
+        insights:'Combined totals across all four vendor carousel posts.',
+        results:[['12,818','Views'],['5,633','Accounts reached'],['392','Likes'],['55','Shares'],['145','Profile visits'],['4','Posts']],
+        slides:[
+        { video:'media/v/temari-vendor-1.mp4', poster:'media/v/temari-vendor-1.jpg' },
+        { src:IMG('temari-vendor-2') }, { src:IMG('temari-vendor-3') }, { src:IMG('temari-vendor-4') }, { src:IMG('temari-vendor-5') }, { src:IMG('temari-vendor-6') }
+      ]}] },
+    { type:'impact', stat:'220K', label:'Views in 1 month',
+      text:'Over the month of the fair (Oct 3 – Nov 1), Temari’s account reached 220,000 views and gained 829 new followers, and Temari Hawaiʻi welcomed 250 new members during the promotional period. Most viewers were new to the account: 96% of Good Kine Trash viewers weren’t following Temari yet.',
+      slides:[ { video:'media/v/temari-1916.mp4', poster:'media/v/temari-1916.jpg', alt:'Crowds at Trash & Treasure' }, { img:IMG('temari-monthly'), alt:'Instagram monthly insights: 220.0K views and 829 new followers, Oct 3 – Nov 1', fit:'contain' } ] },
+    { type:'quotes', title:'From vendors and organizers', items:[
+      { q:'Your ideas. Your follow through. Your success. Omedetou.', who:'Ann Asakura', role:'Founder, Temari Hawaiʻi', big:true },
+      { q:'So much energy, the crowd was amazing… Sales wise, it was the best day I’ve ever done! Thank you so much for your hard work… promoting the fair, making everything run so smoothly, and making it easy for us vendors so we could focus on doing our thing.', who:'Mariko M.', role:'Beachcake Ceramics, vendor' },
+      { q:'It was my most successful year and I met a lot of people that have been waiting for it to come around.', who:'Penny A.', role:'Kokeshi Works, vendor' },
+      { q:'This was the best fair! The amount of people that came was amazing! See you next year!', who:'Susan T. Inafuku', role:'' },
+      { q:'Social media was a success! Good logistics.', who:'Vendor survey', role:'Post-fair feedback form', img:IMG('temari-survey-1') },
+      { q:'Continue social media promos — excellent.', who:'Vendor survey', role:'Post-fair feedback form', img:IMG('temari-survey-2') }
+    ]}
+  ]
+},
+{
+  id:'moiliili', num:'02', client:'Mōʻiliʻili Community Center', affil:'Freelance', navShort:'Mōʻiliʻili', cover:IMG('thumb-moiliili-2'),
+  focus:'Documentary production · Nonprofit fundraising · Event creative',
+  title:'Celebrating 50 Years of <em>Local</em> Creativity',
+  meta:'Grant Kagimoto / Cane Haul Road 50th Anniversary Fundraiser<br>Documentary Production, Nonprofit Fundraising, and Event Creative',
+  challenge:'Mōʻiliʻili Community Center hired me to produce content and event materials for a fundraiser celebrating board member Grant Kagimoto’s 50th year in business with Cane Haul Road. The challenge was to honor his creative legacy while creating a meaningful experience for the family, friends, and supporters gathered to celebrate.',
+  approach:'Produce an intimate, interview-driven documentary on Grant’s creative journey, design philosophy, and contributions to Hawaiʻi’s local culture. Build one event identity that connects the documentary, promotional materials, and the celebration itself.',
+  deliverables:['Documentary Production','Scriptwriting & Storyboarding','Interviewing & B-Roll Capture','Videographer Coordination','Video Editing & Motion Design','Voiceover & Typography','Event Branding & Art Direction','Print & Digital Collateral','On-Site Content Capture'],
+  blocks:[
+    { type:'group', layout:'wide', bare:true, eyebrow:'Documentary · 12 minutes', title:'Grant Kagimoto: 50 Years of Cane Haul Road',
+      desc:['An intimate documentary exploring Grant’s creative philosophy, workshop, and influence on Hawaiʻi’s local design culture.','Through interviews and behind-the-scenes footage, the film offers a personal look at the thinking and craftsmanship behind his work. It premiered at the anniversary fundraiser at Café Julia.'],
+      items:[{ kind:'video', orient:'h', title:'Grant Kagimoto: 50 Years of Cane Haul Road', hls:'media/doc/index.txt', poster:'media/v/mcc-doc.jpg', duration:'12:05', teaser:[8,16],
+        concept:true, capLabel:'Video description', capTitle:'50 Years of an Iconic Hawaiʻi Brand | The Story of Cane Haul Road',
+        caption:`In this special conversation, local artist and designer Grant Kagimoto reflects on the journey behind Cane Haul Road—from its beginnings during the cultural awakening of the Hawaiian Renaissance in the 1970s to becoming a beloved part of Hawaiʻi’s visual culture. Through stories, artwork, and personal reflections, Grant shares the inspiration behind some of his most recognizable designs and the communities that continue to shape his work today.
+
+Founded in 1975, Cane Haul Road emerged alongside a growing movement of local artists, musicians, writers, and cultural practitioners who embraced and celebrated Hawaiʻi’s unique identity. For five decades, the brand has honored Hawaiʻi’s plantation-era communities, local culture, and the stories that connect us.` }] },
+    { type:'group', layout:'featureH', eyebrow:'Event identity', title:'Event Identity & Collateral',
+      desc:['One visual identity carried across the documentary and event materials. Consistent typography, color, and imagery connected the digital storytelling with the physical event.'],
+      items:[{ kind:'video', orient:'h', aspect:'1400/1080', title:'Event program', ...V('mcc-program'), noStats:true, capLabel:'Event program' }] },
+    { type:'group', layout:'feature', eyebrow:'Recap', title:'Capturing the Celebration',
+      desc:['A short-form recap of the people, conversations, and memorable moments of the night.','While the documentary honored Grant’s 50-year journey, the recap celebrated the community that gathered around him.'],
+      items:[{ kind:'video', title:'We So Lucky recap Reel', ...V('mcc-recap'), poster:'media/v/mcc-recap-7s.jpg', ig:IG('DYI9UPduszv'),
+        caption:`We So Lucky 4.26.26 💛 Mahalo to everyone who helped make this celebration of 50 years of @canehaulroadltd so special.
+
+Big thanks to the hardworking volunteers of Temari Hawai‘i and MCC whose care and effort brought the night together, and to everyone who came out to celebrate community, creativity, and legacy.
+
+And of course, mahalo Grant, for 50 years of sharing your artistic vision and enriching Hawai‘i’s local creative community through Cane Haul Road.`,
+        insights:'Viewers watched 11 seconds of the 14-second Reel on average, and Instagram rated its like rate (6.2%) higher and its skip rate lower than the account’s typical Reels. Guests and community members also left congratulations for Grant in the comments.',
+        results:[['2,269','Views'],['1,173','Accounts reached'],['86','Likes'],['6.2%','Like rate'],['7','Shares'],['11s','Avg. watch time']] }] },
+    { type:'impact', headline:'An intimate, shared moment among <em>250<span class="plus">+</span></em> guests.',
+      text:'The documentary premiered at the fundraising celebration at Café Julia. Afterward, San Times reached out asking to feature the film on its website.',
+      slides:[ { video:'media/v/mcc-event.mp4', poster:'media/v/mcc-event.jpg', alt:'Footage from the celebration' } ] },
+    { type:'quotes', title:'After the premiere', items:[
+      { q:'Just watched the video you made — amazing work!!!! Everyone has been raving about it and I see why! Congrats!!', who:'Family member of Grant Kagimoto', role:'', big:true },
+      { q:'Mahalo Emiri. You are so talented and such fun to work with!', who:'Carl T.', role:'Mōʻiliʻili Community Center board member' },
+      { q:'We so lucky we also have you. Thank you for the fabulous job!!!!!', who:'Diane N.', role:'Mōʻiliʻili Community Center board member' }
+    ]}
+  ]
+},
+{
+  id:'prince', num:'03', client:'Prince Waikiki', affil:'Refinery Creative', navShort:'Prince', cover:IMG('thumb-prince-2'),
+  focus:'Interview production · Content strategy · Visual storytelling',
+  title:'Putting <em>Personality</em> Into Hotel Content',
+  meta:'Prince Waikiki Social Media<br>Interview Production, Social Media Strategy, and Human-Centered Content',
+  challenge:'Prince Waikiki’s established visual identity featured polished lifestyle photography and aspirational hospitality imagery. The client wanted its social presence to feel more human, authentic, and relatable.',
+  approach:'Complement traditional hospitality content with unscripted interviews, immersive POV videos, and art-directed experiences. Put the people and personal moments behind the brand at the forefront.',
+  deliverables:['Creative Strategy & Concept Development','Art Direction','Interview-Based Video Production','Content Capture & Shoot Coordination','Photographer & Videographer Collaboration','Typography & Motion Design','Sound Design','Social Media Graphics','Hand Modeling'],
+  blocks:[
+    { type:'group', layout:'grid4', eyebrow:'Interviews', title:'The People Behind the Experience',
+      desc:['Interview-based content featuring the people who know the Prince Waikiki experience best: its employees and partners.','Through carefully prepared interview questions and on-camera guidance, I helped employees feel comfortable sharing their stories naturally and confidently. Curated B-roll and photography complemented their voices, bringing the brand’s personality to life.'],
+      items:[
+        { kind:'video', title:'Staff Interview: Noah Goss', ...V('pw-noah-goss'), poster:'media/v/pw-noah-goss-face.jpg', teaser:[12,16], ig:IG('DeIO4AQiEns'), caption:CAP.pwNoah,
+          insights:'Viewers shared it 64 times and left 11 comments, with a 12-second average watch time.',
+          results:[['6,656','Views'],['4,773','Accounts reached'],['276','Likes'],['64','Shares'],['19','Saves'],['10','New follows']] },
+        { kind:'video', title:'Father’s Day with Chef Brooke Tadena', ...V('pw-fathers-day'), ig:IG('DZ3YonIB8su'), caption:CAP.pwBrooke,
+          insights:'A collaboration post with @100sails. Instagram rated its like rate (3.9%) higher than the account’s typical Reels.',
+          results:[['3,279','Views'],['470','Accounts reached'],['102','Likes'],['5','Shares'],['3','Comments'],['7s','Avg. watch time']] },
+        { kind:'video', title:'Stargazers of Hawaii', ...V('pw-stargazers'), poster:'media/v/pw-stargazers-title.jpg',
+          insights:'A collaboration post with @hinanabar and @stargazersofhawaii. Instagram rated its like and save rates higher than the account’s typical Reels.',
+          results:[['1,676','Views'],['1,330','Accounts reached'],['46','Likes'],['4','Shares'],['3','Saves'],['5s','Avg. watch time']] },
+        { kind:'video', title:'The Art of Details', ...V('pw-art-of-details'), poster:'media/v/pw-art-of-details-smile.jpg', ig:IG('DdfCK8xgT8q'), caption:CAP.pwDetails,
+          insights:'Earned 81 likes and 9 shares, with an 8-second average watch time.',
+          results:[['2,330','Views'],['1,711','Accounts reached'],['81','Likes'],['9','Shares'],['3','Comments'],['8s','Avg. watch time']] }
+      ] },
+    { type:'group', layout:'grid', eyebrow:'POV Reels', title:'Storytelling Through Perspective',
+      desc:['First-person videos that invite audiences to imagine themselves at the hotel.','These Reels rely on storyboarding, shot lists, and visual pacing rather than narration or heavy copy.'],
+      items:[
+        { kind:'video', title:'Girls’ Night Staycation', ...V('pw-summer-city'), ig:IG('DZ_AnkcBXoe'), caption:CAP.pwGirls,
+          insights:'Instagram rated its share (0.8%), like (5.0%), and save rates higher than the account’s typical Reels.',
+          results:[['2,655','Views'],['383','Accounts reached'],['100','Likes'],['17','Shares'],['4','Saves'],['6s','Avg. watch time']] },
+        { kind:'video', title:'Club Lounge POV', ...V('pw-club-lounge'), ig:IG('DW2ta9DAeaI'), caption:CAP.pwClub,
+          insights:'Shared 41 times, and Instagram rated its like rate (4.2%) higher than the account’s typical Reels.',
+          results:[['5,026','Views'],['3,510','Accounts reached'],['151','Likes'],['41','Shares'],['13','Saves'],['7s','Avg. watch time']] },
+        { kind:'video', title:'Spend a Day With Me', ...V('pw-day-with-me'), poster:'media/v/pw-day-with-me-coffee.jpg', ig:IG('DYvysgVESXd'), caption:CAP.pwDay,
+          insights:'Instagram rated its share, like (4.9%), save, and repost rates higher than the account’s typical Reels, with a lower skip rate.',
+          results:[['3,542','Views'],['2,609','Accounts reached'],['133','Likes'],['4.9%','Like rate'],['13','Shares'],['8s','Avg. watch time']] }
+      ] },
+    { type:'group', layout:'grid4', eyebrow:'Event promotion', title:'Sakura Bar',
+      desc:['One carefully planned photo and video shoot generated a full set of promotional content for Sakura Bar.','The shoot happened before the bar was fully operating, so the direction focused on intimate vignettes, product details, hand modeling, and movement to build atmosphere without relying on crowds.'],
+      stats:{ note:'House of Sakura · Combined results', text:'Combined totals across all 8 posts I created for the House of Sakura pop-up. The pieces above are highlights.', items:[['29,876','Views'],['19,788','Accounts reached'],['652','Likes'],['281','Shares'],['47','Saves'],['8','Posts']] , hint:'' },
+      items:[
+        { kind:'video', inline:true, title:'Now Open', ...V('pw-sakura-open'), ig:IG('DWkkBfxFAUr') },
+        { kind:'video', inline:true, title:'Reminder Reel', ...V('pw-sakura-reminder'), ig:IG('DXGKJTLDWA0') },
+        { kind:'video', inline:true, title:'House of Sakura: Last Call', ...V('pw-sakura-last-call'), ig:IG('DYyTi57iPDO') },
+        { kind:'image', title:'An Evening with DJ Anit', src:IMG('pw-sakura-dj'), aspect:'9/16', ig:IG('DXSETh8iOk9'), igVisible:true }
+      ] }
+  ]
+},
+{
+  id:'campaigns', num:'04', client:'Selected Campaigns', affil:'Refinery Creative', navShort:'Campaigns', cover:IMG('kuono-photo-1'),
+  focus:'Campaign ideation · Short-form video · Audience participation',
+  title:'Creative Approaches to <em>Event</em> Promotion',
+  meta:'Campaign Ideation, Short-Form Video, and Audience Participation',
+  intro:'A selection of smaller projects exploring how creative concepts and digital content can generate excitement, build connections, and encourage real-world engagement.',
+  jump:[['sera','Sera'],['kuono','Kūʻono Marketplace']],
+  blocks:[
+    { type:'subhead', id:'sera', name:'Sera' },
+    { type:'group', layout:'feature', eyebrow:'Opening announcement', title:'Opening Announcement',
+      desc:['Announcement content using video editing and motion graphics to build anticipation for Sera’s opening.'],
+      chips:['Video Editing','Motion Graphics','Social Media Content Production'],
+      items:[{ kind:'video', title:'Sera opening announcement', ...V('sera-announcement'), poster:'media/v/sera-announcement-logo.jpg', ig:IG('DKNradRBmyV'), caption:CAP.seraOpen, noStats:true, igCta:true }] },
+    { type:'group', layout:'grid', eyebrow:'Concept exploration', title:'Pouring Into Fall', tag:'Unpublished concept',
+      desc:['A seasonal campaign concept inspired by SERA’s connection to world-class wines, the arrival of autumn, and the restaurant’s upcoming events.','The goal was to bring greater intention and cohesion to the restaurant’s event promotions, using the season as an opportunity to tie individual experiences back to SERA’s brand identity and messaging.'],
+      note:'Concept developed and pitched internally; not published due to time and budget constraints.',
+      chips:['Campaign Ideation','Creative Concept Development','Motion Design Exploration'],
+      items:[
+        { kind:'video', title:'Pouring into Fall', ...V('sera-pif-intro'), poster:'media/v/sera-pif-title.jpg', concept:true },
+        { kind:'video', title:'Giveaway Reel', ...V('sera-pif-giveaway'), poster:'media/v/sera-pif-giveaway-title.jpg', concept:true },
+        { kind:'image', title:'Reel cover concepts', src:IMG('sera-pif-covers'), aspect:'865/1180' }
+      ] },
+    { type:'subhead', id:'kuono', name:'Kūʻono Marketplace', title:'Turning a Shopping Destination Into a Community Experience',
+      meta:'Halloween Activations · Event Promotion, Experiential Marketing, and Community Engagement',
+      challenge:'Kūʻono Marketplace had previously struggled to generate customer participation in its on-site activations. The goal was accessible, family-friendly experiences that encouraged visits, participation, and organic social sharing.',
+      approach:'Create Halloween activations that were simple to join, easy to promote digitally, and engaging enough that visitors wanted to share them.',
+      deliverables:['Activation Concept Development','Content Capture & Creation','Local Artist Coordination','Merchant & Client Coordination','Short-Form Video Editing','Voiceover & Motion Graphics','Event Promotion'] },
+    { type:'group', layout:'feature', eyebrow:'Activation', title:'Pumpkin Scavenger Hunt',
+      desc:['Helped develop a pumpkin scavenger hunt that encouraged visitors to explore the marketplace.','The simple format got visitors sharing their finds on Instagram Stories and tagging the account, organic engagement that had been uncommon for the property.'],
+      items:[{ kind:'video', title:'The Halloween Hunt Reel', ...V('kuono-scavenger'), ig:IG('DfK9c5BSvjk'), caption:CAP.kuonoHunt,
+        insights:'Outperformed Kūʻono’s typical Reels: Instagram rated its share, save, and repost rates higher than usual, with a lower skip rate. Viewers shared it 24 times and reposted it 6 times.',
+        results:[['1,303','Views'],['24','Shares'],['2.8%','Share rate','↑ Higher than typical'],['0.7%','Repost rate','↑ Higher than typical'],['0.4%','Save rate','↑ Higher than typical'],['58.1%','Skip rate','↓ Lower than typical']] }] },
+    { type:'group', layout:'grid', eyebrow:'Customer participation', title:'Visitors sharing their finds',
+      desc:['Stories and posts from visitors who joined the hunt and tagged the marketplace.'],
+      items:[
+        { kind:'video', title:'Visitor Story', ...V('kuono-story-1') },
+        { kind:'video', title:'Visitor Story', ...V('kuono-story-2') },
+        { kind:'image', title:'Visitor Story', src:IMG('kuono-ugc-1'), aspect:'1170/2075' },
+        { kind:'image', title:'Visitor Story', src:IMG('kuono-ugc-2'), aspect:'3/4' },
+        { kind:'image', title:'Visitor Story', src:IMG('kuono-ugc-3'), aspect:'1170/1553' },
+        { kind:'image', title:'Visitor Story', src:IMG('kuono-ugc-4'), aspect:'1170/1553' }
+      ] },
+    { type:'gallery', eyebrow:'Activation', title:'Community Photo Opportunity',
+      desc:['Collaborated with a local artist on a seasonal photo opportunity for families, giving people another reason to visit and share throughout October.'],
+      items:[
+        { kind:'image', title:'Photo-op installation', src:IMG('kuono-photo-1'), aspect:'3/4' },
+        { kind:'image', title:'Photo-op installation', src:IMG('kuono-photo-2'), aspect:'3/4' },
+        { kind:'image', title:'Photo-op installation', src:IMG('kuono-photo-3'), aspect:'3/4' },
+        { kind:'image', title:'Photo-op installation', src:IMG('kuono-photo-4'), aspect:'3/4' }
+      ] }
+  ]
+}
+];
+
+/* ============================================================
+   RENDERING
+   ============================================================ */
+const $ = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+const ICON = {
+  play:'<svg width="16" height="18" viewBox="0 0 16 18" fill="currentColor" aria-hidden="true"><path d="M2 1.5v15L15 9z"/></svg>',
+  pause:'<svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor" aria-hidden="true"><rect x="1" y="1" width="4" height="14"/><rect x="9" y="1" width="4" height="14"/></svg>',
+  sound:'<svg width="18" height="16" viewBox="0 0 18 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 5.5h3L9 2v12L5 10.5H2z" fill="currentColor"/><path d="M12 5a4 4 0 0 1 0 6M14.5 2.5a7.5 7.5 0 0 1 0 11"/></svg>',
+  mute:'<svg width="18" height="16" viewBox="0 0 18 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 5.5h3L9 2v12L5 10.5H2z" fill="currentColor"/><path d="M12 5.5l5 5M17 5.5l-5 5"/></svg>',
+  arrow:'<svg width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M1 6h14M10 1l5 5-5 5"/></svg>',
+  stack:'<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="1" y="3.5" width="9.5" height="9.5" rx="1.2"/><path d="M4 1h7.8A1.2 1.2 0 0 1 13 2.2V10"/></svg>',
+  prev:'<svg width="8" height="12" viewBox="0 0 8 12" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6.5 1 1.5 6l5 5"/></svg>',
+  next:'<svg width="8" height="12" viewBox="0 0 8 12" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M1.5 1l5 5-5 5"/></svg>',
+  x:'<svg width="10" height="10" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M1 1l8 8M9 1 1 9"/></svg>'
+};
+
+const paras = d => (Array.isArray(d)?d:[d]).map(p=>`<p>${p}</p>`).join('');
+const phMedia = (title, what) => `<div class="ph-media"><b>${title}</b><small>${what}</small></div>`;
+const hasMedia = it => it.kind==='carousel' ? Array.isArray(it.slides) && it.slides.some(s=>s.src||s.video) : !!(it.src||it.hls);
+const field = (label, val, hint) => val
+  ? `<div class="field"><h5>${label}</h5><p>${val}</p></div>`
+  : `<div class="field ph"><h5>${label}</h5><p class="ph-text">${hint}</p></div>`;
+
+function statsHTML(rs){
+  return `<div class="field"><h5>Results</h5><dl class="stats" style="--cols:${Math.min(3,rs.length)}">${rs.map(([v,l,b])=>`<div><dd>${v}</dd><dt>${l}</dt>${b?`<dt class="vs">${b}</dt>`:''}</div>`).join('')}</dl></div>`;
+}
+const nl = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\n/g,'<br>');
+const capHTML = it => (it.capLabel && !it.caption)
+  ? `<div class="card-cap"><h5>${it.capLabel}</h5></div>`
+  : `<div class="card-cap ${it.caption?'':'ph'}"><h5>${it.capLabel||'Instagram caption'}</h5>${it.capTitle?`<p class="cap-title">${it.capTitle}</p>`:''}<p class="cap-text ${it.caption?'':'ph-text'}">${it.caption?nl(it.caption):'Add the post caption'}</p>${it.igCta?'':igLine(it)}</div>`;
+const igLine = it => it.ig ? `<a class="ig-line" href="${it.ig}" target="_blank" rel="noopener">Original post on Instagram <span aria-hidden="true">↗</span></a>` : '';
+const titleHTML = it => (it.ig!==undefined && (it.inline || it.igVisible))
+  ? `<a class="ig-link ${it.ig?'':'is-fpo'}" href="${it.ig||'#'}" ${it.ig?'target="_blank" rel="noopener"':'aria-disabled="true"'}>${it.title} <span aria-hidden="true">↗</span></a>${it.ig?'':'<span class="fpo-tag ph">IG link FPO</span>'}`
+  : it.title;
+
+function deliverables(list){
+  return `<div class="fact fact-deliv"><h3>Deliverables</h3><ul class="deliv">${list.map(d=>`<li>${d}</li>`).join('')}</ul></div>`;
+}
+
+function panel(it, group){
+  const desc = it.desc || (group.desc ? (Array.isArray(group.desc)?group.desc.join(' '):group.desc) : '');
+  const isCar = it.kind==='carousel';
+  return `<div class="card-panel">
+    <div class="panel-top"><p class="eyebrow">${group.eyebrow || group.title}</p><button class="close" type="button">Close ${ICON.x}</button></div>
+    <h4 class="panel-title">${it.title}</h4>
+    ${desc?`<p class="panel-desc">${desc}</p>`:''}
+    ${it.igCta&&it.ig?`<a class="ig-cta" href="${it.ig}" target="_blank" rel="noopener">View the live post on Instagram <span aria-hidden="true">↗</span></a>`:''}
+    ${it.concept||it.noStats?'':field('Insights', it.insights, 'Add a short insight: what worked and why')}
+    ${it.concept||it.noStats?'':(Array.isArray(it.results) ? statsHTML(it.results) : field('Results', it.results, it.resultsHint ? `Add verified ${it.resultsHint.toLowerCase()}` : 'Add verified results, if available'))}
+  </div>`;
+}
+
+function videoCard(it, group){
+  const ph = !it.src && !it.hls;
+  const h = it.orient==='h';
+  return `<article class="card card--video ${h?'card--h':''} ${it.span?'span-'+it.span:''} ${it.inline?'card--inline':''}" data-kind="video" ${it.inline?'data-inline="1"':''} data-ts="${(it.teaser||[0,4])[0]}" data-te="${(it.teaser||[0,4])[1]}">
+    <div class="card-media" tabindex="0" role="button" ${it.inline?'':'aria-expanded="false"'} aria-label="Play ${it.title}" data-cursor="${it.inline?'Play':(it.concept||it.noStats?'Play + details':'Play + see insights')}" data-cursor-default="${it.inline?'Play':(it.concept||it.noStats?'Play + details':'Play + see insights')}" ${it.aspect?`style="aspect-ratio:${it.aspect}"`:''}>
+      ${ph ? phMedia(it.title, h ? 'Add 16:9 video' : 'Add 9:16 video')
+           : it.hls ? `<video data-hls="${it.hls}" ${it.poster?`poster="${it.poster}"`:''} preload="none" muted playsinline></video>`
+           : `<video src="${it.src}" ${it.poster?`poster="${it.poster}"`:''} preload="metadata" muted playsinline></video>`}
+      <span class="play-badge">${ICON.play}</span>
+      ${it.duration?`<span class="dur">${it.duration}</span>`:''}
+      ${ph?'<span class="teaser-bar"><i></i></span>':''}
+      ${ph?'':`<div class="vctrl">
+        <button class="vbtn v-play" type="button" aria-label="Pause">${ICON.pause}</button>
+        <input class="vprog" type="range" min="0" max="1000" value="0" aria-label="Seek">
+        <span class="vtime">0:00</span>
+        <button class="vbtn v-mute" type="button" aria-label="Mute">${ICON.sound}</button>
+      </div>`}
+    </div>
+    ${it.inline||it.concept?'':capHTML(it)}
+    <div class="card-under"><h4>${titleHTML(it)}</h4>${it.desc?`<p>${it.desc}</p>`:''}</div>
+    ${it.inline?'':panel(it, group)}
+  </article>`;
+}
+
+function carouselCard(it, group){
+  const slides = Array.isArray(it.slides) ? it.slides : Array.from({length:it.slides||5},()=>({}));
+  it._slides = slides;
+  return `<article class="card card--carousel" data-kind="carousel" data-notes='${JSON.stringify(slides.map(s=>s.note||""))}'>
+    <div class="card-media car" tabindex="0" role="button" aria-expanded="false" aria-roledescription="carousel" aria-label="${it.title}, ${slides.length} slides" data-cursor="View + see insights" data-cursor-default="View + see insights">
+      <div class="car-track">
+        ${slides.map((s,i)=>`<div class="slide" aria-label="Slide ${i+1} of ${slides.length}">${
+          s.video ? `<video src="${s.video}" ${s.poster?`poster="${s.poster}"`:''} muted loop playsinline preload="metadata"></video>`
+          : s.src ? `<img src="${s.src}" alt="${s.alt||''}" draggable="false" loading="lazy">`
+          : phMedia(it.title, `Slide ${i+1} · add 4:5 image`)}</div>`).join('')}
+      </div>
+      <span class="car-pill">${ICON.stack}<span class="count">1/${slides.length}</span></span>
+      <button class="car-btn prev" type="button" aria-label="Previous slide" disabled>${ICON.prev}</button>
+      <button class="car-btn next" type="button" aria-label="Next slide">${ICON.next}</button>
+      <div class="car-dots">${slides.map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div>
+    </div>
+    ${capHTML(it)}
+    <div class="card-under"><h4>${it.title}</h4>${it.desc?`<p>${it.desc}</p>`:''}</div>
+    ${panel(it, group)}
+  </article>`;
+}
+
+function imageCard(it){
+  return `<figure class="card card--image ${it.src?'':'ph'} ${it.span?'span-'+it.span:''}">
+    <div class="card-media" style="aspect-ratio:${it.aspect||'4/5'}">${it.src?`<img src="${it.src}" alt="${it.alt||it.title}" loading="lazy">`:phMedia(it.title,'Add image')}</div>
+    <figcaption>${titleHTML(it)}</figcaption>
+  </figure>`;
+}
+
+const card = (it, g) => it.kind==='video' ? videoCard(it,g) : it.kind==='carousel' ? carouselCard(it,g) : imageCard(it);
+
+function groupHead(g){
+  return `<div class="group-head">
+    ${g.eyebrow?`<p class="eyebrow">${g.eyebrow}</p>`:''}
+    <h3 class="group-title">${g.title}</h3>
+    ${g.tag?`<span class="tag">${g.tag}</span>`:''}
+    ${g.desc?`<div class="group-desc">${paras(g.desc)}</div>`:''}
+    ${g.note?`<p class="group-note">${g.note}</p>`:''}
+    ${g.chips?`<ul class="chips" aria-label="Deliverables">${g.chips.map(c=>`<li>${c}</li>`).join('')}</ul>`:''}
+  </div>`;
+}
+
+function renderBlock(b){
+  const allPh = b.items && !b.items.some(hasMedia);
+  if(b.type==='group'){
+    if(b.layout==='feature' || b.layout==='featureH'){
+      return `<section class="group ${allPh?'ph':''}"><div class="grid grid--feature ${b.layout==='featureH'?'grid--feature-h':''}">${b.items.map(it=>card(it,b)).join('')}<div class="feature-text">${groupHead(b)}</div></div></section>`;
+    }
+    const cls = b.layout==='grid2' ? 'grid--2' : b.layout==='grid4' ? 'grid--4' : b.layout==='wide' ? 'grid--wide' : '';
+    const stats = b.stats ? `<div class="group-stats ${b.stats.items.length?'':'ph'}"><p class="eyebrow">${b.stats.note}</p>${b.stats.text?`<p class="stats-text">${b.stats.text}</p>`:''}${b.stats.items.length?`<dl class="stats">${b.stats.items.map(([v,l])=>`<div><dd>${v}</dd><dt>${l}</dt></div>`).join('')}</dl>`:`<p class="ph-text">${b.stats.hint}</p>`}</div>` : '';
+    return `<section class="group ${allPh?'ph':''}">${b.bare?'':groupHead(b)}<div class="grid ${cls}">${b.items.map(it=>card(it,b)).join('')}</div>${stats}</section>`;
+  }
+  if(b.type==='gallery'){
+    return `<section class="group ${allPh?'ph':''}">${groupHead(b)}<div class="gallery">${b.items.map(it=>card(it,b)).join('')}</div></section>`;
+  }
+  if(b.type==='impact'){
+    if(b.placeholderOnly) return `<section class="impact ph"><p class="eyebrow">The Impact</p><p class="impact-text ph-text">${b.hint}</p></section>`;
+    return `<section class="impact ${b.slides?'impact--split':''}" aria-label="The Impact">
+      <div class="impact-copy">
+        <p class="eyebrow">The Impact</p>
+        ${b.stat?`<p class="stat">${b.stat}</p><p class="stat-label">${b.label}</p>`:`<p class="impact-headline">${b.headline}</p>`}
+        <p class="impact-text">${b.text}</p>
+        ${b.hint?`<p class="ph ph-text">${b.hint}</p>`:''}
+      </div>
+      ${b.slides?`<div class="impact-media ${b.slides.some(s=>s.fit)?'impact-media--tall':''}" data-seq>${b.slides.map((s,k)=>`<figure class="seq ${k?'':'on'} ${s.fit==='contain'?'seq--contain':''}">${s.video?`<video src="${s.video}" poster="${s.poster}" muted playsinline preload="metadata" aria-label="${s.alt||''}"></video>`:`<img src="${s.img}" alt="${s.alt||''}" loading="lazy">`}</figure>`).join('')}</div>`:''}
+    </section>`;
+  }
+  if(b.type==='quotes'){
+    return `<section class="voices" aria-label="Community response">
+      <div class="voices-head"><p class="eyebrow">Community response</p><h3 class="group-title">${b.title}</h3></div>
+      <div class="voices-grid">${b.items.map(q=>`<figure class="voice ${q.big?'voice--big':''} ${q.img?'voice--img':''}">
+        ${q.img?`<img src="${q.img}" alt="Handwritten survey response: ${q.q}" loading="lazy">`:''}
+        <blockquote>“${q.q}”</blockquote>
+        <figcaption><b>${q.who}</b>${q.role?`<span>${q.role}</span>`:''}</figcaption>
+      </figure>`).join('')}</div>
+    </section>`;
+  }
+  if(b.type==='testimonials'){
+    return `<section class="group ph"><div class="group-head"><p class="eyebrow">Community response</p><h3 class="group-title">In their words</h3></div>
+      <div class="quotes">${b.who.map(w=>`<div class="quote"><p>Add a verified quote</p><small>${w}</small></div>`).join('')}</div></section>`;
+  }
+  if(b.type==='subhead'){
+    return `<section class="subhead" id="${b.id}" data-subhead>
+      <h3 class="subhead-name">${b.name}</h3>
+      ${b.title?`<p class="subhead-title">${b.title}</p>`:''}
+      ${b.meta?`<p class="case-meta">${b.meta}</p>`:''}
+      ${b.challenge?`<div class="subhead-facts">
+        <div class="fact"><h3>The Challenge</h3><p>${b.challenge}</p></div>
+        <div class="fact"><h3>The Approach</h3><p>${b.approach}</p></div>
+        ${deliverables(b.deliverables)}
+      </div>`:''}
+    </section>`;
+  }
+  return '';
+}
+
+function renderCase(c, i){
+  const prev = i===0 ? ['#work','Index'] : ['#'+CASES[i-1].id, CASES[i-1].navShort];
+  const next = i===CASES.length-1 ? ['#contact','Contact'] : ['#'+CASES[i+1].id, CASES[i+1].navShort];
+  return `<section class="case gutter" id="${c.id}" aria-labelledby="${c.id}-t">
+    <aside class="case-aside"><div class="aside-inner">
+      <p class="kicker"><span class="num">${c.num}</span><span>${c.client}</span>${c.affil?`<span class="affil">— ${c.affil}</span>`:''}</p>
+      <h2 class="case-title" id="${c.id}-t">${c.title}</h2>
+      <p class="case-meta">${c.meta}</p>
+      ${c.account?`<dl class="acct">${c.account.map(([v,l])=>`<div><dd>${v}</dd><dt>${l}</dt></div>`).join('')}</dl>`:''}
+      ${c.intro?`<p class="case-intro">${c.intro}</p>`:''}
+      ${c.challenge?`<div class="fact"><h3>The Challenge</h3><p>${c.challenge}</p></div>`:''}
+      ${c.approach?`<div class="fact"><h3>The Approach</h3><p>${c.approach}</p></div>`:''}
+      ${c.deliverables?deliverables(c.deliverables):''}
+      ${c.jump?`<ul class="jump">${c.jump.map(([id,n])=>`<li><a href="#${id}">${n}${ICON.arrow}</a></li>`).join('')}</ul>`:''}
+      <nav class="case-step" aria-label="Project navigation"><a href="${prev[0]}">← ${prev[1]}</a><a href="${next[0]}">${next[1]} →</a></nav>
+    </div></aside>
+    <div class="case-body">${c.blocks.map(renderBlock).join('')}</div>
+  </section>`;
+}
+
+$('#cases').innerHTML = CASES.map(renderCase).join('');
+
+/* Hide a sub-project header in published view when everything under it is unfinished */
+$$('[data-subhead]').forEach(sh=>{
+  let n = sh.nextElementSibling, any=false;
+  while(n && !n.hasAttribute('data-subhead')){ if(!n.classList.contains('ph')) any=true; n=n.nextElementSibling; }
+  if(!any) sh.classList.add('ph');
+});
+
+/* nav + index */
+$('#workList').innerHTML = CASES.map((c,i)=>`<li><a class="work-row ${i?'':'is-active'}" href="#${c.id}" data-i="${i}">
+  <span class="n">${c.num}</span><span><span class="name">${c.client}</span><span class="focus">${c.focus}</span></span>${ICON.arrow}</a></li>`).join('');
+$('#workPreview').innerHTML = CASES.map((c,i)=>{
+  const media = c.cover ? `<img src="${c.cover}" alt="">` : '';
+  return `<div class="pv ${i?'':'is-active'}">${media || `<span class="pv-name">${c.client}</span><span class="eyebrow ph">Add a cover image</span>`}</div>`;
+}).join('');
+$$('.work-row').forEach(r=>{
+  const on=()=>{ $$('.work-row').forEach(x=>x.classList.toggle('is-active',x===r)); $$('#workPreview .pv').forEach((p,i)=>p.classList.toggle('is-active', i==r.dataset.i)); };
+  r.addEventListener('mouseenter',on); r.addEventListener('focus',on);
+});
+
+/* ============================================================
+   HERO ROTATION
+   ============================================================ */
+const heroClips = $('#heroClips');
+heroClips.innerHTML = HERO.map((h,i)=>`<div class="hero-clip ${h.src||h.poster?'':'is-ph'} ${i?'':'is-active'}">
+  ${h.src?`<video src="${h.src}" ${h.poster?`poster="${h.poster}"`:''} muted loop playsinline preload="${i?'none':'auto'}"></video>`: h.poster?`<img src="${h.poster}" alt="">`:`<span class="hero-ph-label ph">Hero clip ${i+1} · ${h.label.split('· ')[1]}</span>`}
+</div>`).join('');
+let heroI = 0;
+function showHero(i){
+  heroI = i;
+  $$('.hero-clip').forEach((c,k)=>{ c.classList.toggle('is-active',k===i); const v=c.querySelector('video'); if(v){ k===i ? v.play().catch(()=>{}) : v.pause(); } });
+  const h = HERO[i];
+  if(!$('#heroCard')) return;
+  const parts = [$('#heroCardTitle'), $('.hero-card-top')];
+  parts.forEach(p=>p.classList.add('is-out'));
+  setTimeout(()=>{
+    $('#heroCardLabel').textContent = h.label;
+    $('#heroCardCount').textContent = `${i+1} / ${HERO.length}`;
+    $('#heroCardTitle').textContent = h.title;
+    $('#heroCard').href = '#'+h.case;
+    const th = $('#heroCardThumb'); const img = th.querySelector('img'); if(img) img.remove();
+    if(h.poster){ th.insertAdjacentHTML('afterbegin', `<img src="${h.poster}" alt="">`); }
+    parts.forEach(p=>p.classList.remove('is-out'));
+  }, reduce?0:380);
+}
+showHero(0);
+if(!reduce) setInterval(()=>{ if(!document.hidden) showHero((heroI+1)%HERO.length); }, 6500);
+
+/* ============================================================
+   NAV STATE
+   ============================================================ */
+const nav = $('#nav'), hero = $('#hero');
+const navH = () => nav.offsetHeight;
+function onScroll(){ nav.classList.toggle('on-hero', scrollY < hero.offsetHeight - navH()); }
+addEventListener('scroll', onScroll, {passive:true}); onScroll();
+const secObs = new IntersectionObserver(es=>{
+  es.forEach(e=>{ if(e.isIntersecting){ const k = e.target.dataset.navkey; $$('#navLinks a[data-sec]').forEach(a=>a.classList.toggle('is-active', a.dataset.sec===k)); } });
+},{rootMargin:'-45% 0px -50% 0px'});
+[['#about','about'],['#work','work'],['#contact','contact']].forEach(([s,k])=>{ const el=$(s); el.dataset.navkey=k; secObs.observe(el); });
+$$('.case').forEach(s=>{ s.dataset.navkey='work'; secObs.observe(s); });
+
+/* Sticky story column: if it's taller than the screen, let it scroll then stick at its bottom edge */
+/* The story column always pins to the top; if it's ever taller than the screen it scrolls inside itself (CSS). */
+function fitAsides(){}
+
+/* ============================================================
+   CARDS: expand / collapse with FLIP
+   ============================================================ */
+let openCard = null;
+
+function flip(container, target, mutate){
+  if(reduce){ mutate(); return; }
+  const kids = [...container.children];
+  const media = target.querySelector('.card-media');
+  const first = new Map(kids.map(k=>[k,k.getBoundingClientRect()]));
+  const mFirst = media.getBoundingClientRect();
+  mutate();
+  const opts = {duration:480, easing:'cubic-bezier(.2,.7,.2,1)'};
+  kids.forEach(k=>{
+    if(k===target) return;
+    const f = first.get(k), l = k.getBoundingClientRect();
+    if(!f.width || !l.width) return;
+    const dx=f.left-l.left, dy=f.top-l.top;
+    if(Math.abs(dx)<1 && Math.abs(dy)<1) return;
+    k.animate([{transform:`translate(${dx}px,${dy}px)`},{transform:'none'}], opts);
+  });
+  const mLast = media.getBoundingClientRect();
+  if(mLast.width){
+    const s = mFirst.width / mLast.width;
+    media.animate([{transformOrigin:'top left',transform:`translate(${mFirst.left-mLast.left}px,${mFirst.top-mLast.top}px) scale(${s})`},{transformOrigin:'top left',transform:'none'}], opts);
+  }
+}
+
+function setOpen(cardEl, open){
+  const container = cardEl.parentElement;
+  const media = cardEl.querySelector('.card-media');
+  flip(container, cardEl, ()=>{
+    cardEl.classList.toggle('is-open', open);
+    container.classList.toggle('has-open', open);
+  });
+  media.setAttribute('aria-expanded', open);
+  media.dataset.cursor = open ? 'Close' : (media.dataset.cursorDefault || 'Play');
+  cursorText(media.dataset.cursor);
+  cardEl.dispatchEvent(new CustomEvent(open?'card:open':'card:close'));
+  if(open){
+    openCard = cardEl;
+    setTimeout(()=>{
+      const r = cardEl.getBoundingClientRect();
+      if(r.top < navH()+10 || r.bottom > innerHeight) cardEl.scrollIntoView({behavior:reduce?'auto':'smooth', block:'start'});
+    }, reduce?0:500);
+  } else if(openCard===cardEl){ openCard = null; }
+}
+function toggleCard(cardEl){
+  const willOpen = !cardEl.classList.contains('is-open');
+  if(willOpen && openCard && openCard!==cardEl) setOpen(openCard, false);
+  setOpen(cardEl, willOpen);
+}
+
+/* ---------- video cards ---------- */
+const fmt = s => { s=Math.max(0,Math.floor(s||0)); return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`; };
+$$('.card[data-kind="video"]').forEach(cardEl=>{
+  const media = cardEl.querySelector('.card-media');
+  const v = media.querySelector('video');
+  const t0 = +cardEl.dataset.ts || 0, t1 = +cardEl.dataset.te || 4;
+  let teaseTimer;
+  /* streaming documentary: attach HLS on first use (native in Safari, hls.js elsewhere) */
+  const prep = ()=>{
+    if(!v || !v.dataset.hls || v._ready) return;
+    v._ready = true; v.preload = 'auto';
+    if(window.Hls && Hls.isSupported()){ const h = new Hls({maxBufferLength:20}); h.loadSource(v.dataset.hls); h.attachMedia(v); v._hls = h; }
+    else if(v.canPlayType('application/vnd.apple.mpegurl')) v.src = v.dataset.hls;
+  };
+
+  const inline = !!cardEl.dataset.inline;
+  media.addEventListener('mouseenter', ()=>{
+    if(cardEl.classList.contains('is-open') || cardEl.classList.contains('is-live') || reduce || !fine) return;
+    teaseTimer = setTimeout(()=>{
+      cardEl.classList.add('teasing');
+      if(v){ prep(); v.muted = true; try{ v.currentTime = t0; }catch(e){} v.play().catch(()=>{}); }
+    }, 180);
+  });
+  media.addEventListener('mouseleave', ()=>{
+    clearTimeout(teaseTimer);
+    if(cardEl.classList.contains('is-open') || cardEl.classList.contains('is-live')) return;
+    cardEl.classList.remove('teasing');
+    if(v){ v.pause(); if(!v.dataset.hls) v.load(); else { try{ v.currentTime = t0; }catch(e){} } }
+  });
+  const liveToggle = ()=>{
+    if(!v) return;
+    if(cardEl.classList.contains('is-live')){ v.pause(); cardEl.classList.remove('is-live','is-playing'); media.dataset.cursor='Play'; cursorText('Play'); return; }
+    $$('.card--inline.is-live').forEach(c=>{ c.classList.remove('is-live','is-playing'); const ov=c.querySelector('video'); ov&&ov.pause(); });
+    clearTimeout(teaseTimer); cardEl.classList.remove('teasing'); cardEl.classList.add('is-live','is-playing');
+    v.muted = false; try{ v.currentTime = 0; }catch(e){} v.loop = true; v.play().catch(()=>{});
+    media.dataset.cursor='Pause'; cursorText('Pause');
+  };
+  const activate = ()=> inline ? liveToggle() : toggleCard(cardEl);
+  media.addEventListener('click', e=>{ if(e.target.closest('.vctrl')) return; activate(); });
+  media.addEventListener('keydown', e=>{ if((e.key==='Enter'||e.key===' ') && e.target===media){ e.preventDefault(); activate(); } });
+  const closeBtn = cardEl.querySelector('.close');
+  closeBtn && closeBtn.addEventListener('click', ()=>{ setOpen(cardEl,false); media.focus({preventScroll:true}); });
+
+  cardEl.addEventListener('card:open', ()=>{
+    cardEl.classList.remove('teasing'); clearTimeout(teaseTimer);
+    if(v){ prep(); v.muted = false; try{ v.currentTime = 0; }catch(e){} v.play().catch(()=>{ v.muted = true; v.play().catch(()=>{}); }); syncMute(); }
+    else { cardEl.classList.add('is-playing'); }
+  });
+  cardEl.addEventListener('card:close', ()=>{
+    cardEl.classList.remove('is-playing');
+    if(v){ v.pause(); v.muted = true; if(!v.dataset.hls) v.load(); else { try{ v.currentTime = t0; }catch(e){} } }
+  });
+
+  if(!v) return;
+  const bPlay = media.querySelector('.v-play'), bMute = media.querySelector('.v-mute'), prog = media.querySelector('.vprog'), time = media.querySelector('.vtime');
+  function syncMute(){ bMute.innerHTML = v.muted ? ICON.mute : ICON.sound; bMute.setAttribute('aria-label', v.muted ? 'Unmute' : 'Mute'); }
+  v.addEventListener('play', ()=>{ if(cardEl.classList.contains('is-open')){ cardEl.classList.add('is-playing'); bPlay.innerHTML = ICON.pause; bPlay.setAttribute('aria-label','Pause'); } });
+  v.addEventListener('pause', ()=>{ if(!cardEl.classList.contains('is-live')) cardEl.classList.remove('is-playing'); bPlay.innerHTML = ICON.play; bPlay.setAttribute('aria-label','Play'); });
+  v.addEventListener('timeupdate', ()=>{
+    if(cardEl.classList.contains('teasing') && !cardEl.classList.contains('is-open') && v.currentTime > t1){ v.currentTime = t0; }
+    if(cardEl.classList.contains('is-open') && v.duration){ prog.value = Math.round(v.currentTime / v.duration * 1000); time.textContent = `${fmt(v.currentTime)} / ${fmt(v.duration)}`; }
+  });
+  v.addEventListener('ended', ()=>{ if(cardEl.classList.contains('is-open')){ v.currentTime=0; } });
+  bPlay.addEventListener('click', e=>{ e.stopPropagation(); v.paused ? v.play() : v.pause(); });
+  bMute.addEventListener('click', e=>{ e.stopPropagation(); v.muted = !v.muted; syncMute(); });
+  prog.addEventListener('input', e=>{ e.stopPropagation(); if(v.duration) v.currentTime = prog.value/1000 * v.duration; });
+  prog.addEventListener('click', e=>e.stopPropagation());
+});
+
+/* ---------- carousel cards ---------- */
+$$('.card[data-kind="carousel"]').forEach(cardEl=>{
+  const car = cardEl.querySelector('.car');
+  const track = car.querySelector('.car-track');
+  const n = track.children.length;
+  const dots = [...car.querySelectorAll('.car-dots i')];
+  const bPrev = car.querySelector('.prev'), bNext = car.querySelector('.next');
+  const count = car.querySelector('.count');
+  const notes = JSON.parse(cardEl.dataset.notes || '[]');
+  let i = 0, peeked = false, peekTimer, inView = false;
+  const slideVids = [...track.children].map(s=>s.querySelector('video'));
+  function syncVids(){
+    slideVids.forEach((sv,j)=>{ if(!sv) return; if(j===i && inView && !reduce){ sv.play().catch(()=>{}); } else sv.pause(); });
+  }
+  new IntersectionObserver(es=>{ inView = es[0].isIntersecting; syncVids(); },{threshold:.35}).observe(car);
+
+  function go(k){
+    i = Math.max(0, Math.min(n-1, k));
+    syncVids();
+    track.style.transform = `translateX(${-i*100}%)`;
+    dots.forEach((d,j)=>d.classList.toggle('on', j===i));
+    bPrev.disabled = i===0; bNext.disabled = i===n-1;
+    count.textContent = `${i+1}/${n}`;
+  }
+  go(0);
+
+  bPrev.addEventListener('click', e=>{ e.stopPropagation(); go(i-1); });
+  bNext.addEventListener('click', e=>{ e.stopPropagation(); go(i+1); });
+
+  /* hover peek: a single nudge to slide 2 so people know there's more */
+  car.addEventListener('mouseenter', ()=>{
+    if(peeked || reduce || !fine || cardEl.classList.contains('is-open')) return;
+    peekTimer = setTimeout(()=>{ if(i===0){ go(1); peeked = true; } }, 750);
+  });
+  car.addEventListener('mouseleave', ()=>clearTimeout(peekTimer));
+
+  /* swipe / drag */
+  let sx=0, sy=0, dx=0, down=false, dragging=false, suppress=false;
+  car.addEventListener('pointerdown', e=>{
+    if(e.target.closest('.car-btn') || e.button!==0) return;
+    down=true; dragging=false; sx=e.clientX; sy=e.clientY; dx=0; clearTimeout(peekTimer);
+  });
+  car.addEventListener('pointermove', e=>{
+    if(!down) return;
+    dx = e.clientX - sx;
+    if(!dragging && Math.abs(dx) > 6 && Math.abs(dx) > Math.abs(e.clientY - sy)){ dragging=true; car.classList.add('dragging'); try{ car.setPointerCapture(e.pointerId); }catch(_){} }
+    if(dragging){
+      const edge = (i===0 && dx>0) || (i===n-1 && dx<0) ? .35 : 1;
+      track.style.transform = `translateX(calc(${-i*100}% + ${dx*edge}px))`;
+    }
+  });
+  const end = ()=>{
+    if(!down) return; down=false;
+    if(dragging){
+      car.classList.remove('dragging');
+      const w = car.offsetWidth;
+      if(dx < -w*.15) go(i+1); else if(dx > w*.15) go(i-1); else go(i);
+      suppress = true; setTimeout(()=>suppress=false, 60); peeked = true;
+    }
+    dragging=false;
+  };
+  car.addEventListener('pointerup', end);
+  car.addEventListener('pointercancel', end);
+  car.addEventListener('lostpointercapture', end);
+
+  /* two-finger trackpad swipe */
+  let wheelLock=false;
+  car.addEventListener('wheel', e=>{
+    if(Math.abs(e.deltaX) <= Math.abs(e.deltaY) || Math.abs(e.deltaX) < 12) return;
+    e.preventDefault(); if(wheelLock) return;
+    wheelLock = true; go(i + (e.deltaX>0?1:-1)); peeked = true;
+    setTimeout(()=>wheelLock=false, 520);
+  }, {passive:false});
+
+  car.addEventListener('click', e=>{ if(suppress || e.target.closest('.car-btn')) return; toggleCard(cardEl); });
+  car.addEventListener('keydown', e=>{
+    if(e.target!==car) return;
+    if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggleCard(cardEl); }
+    if(e.key==='ArrowRight'){ e.preventDefault(); go(i+1); }
+    if(e.key==='ArrowLeft'){ e.preventDefault(); go(i-1); }
+  });
+  cardEl.querySelector('.close').addEventListener('click', ()=>{ setOpen(cardEl,false); car.focus({preventScroll:true}); });
+  cardEl._go = d => go(i+d);
+});
+
+document.addEventListener('keydown', e=>{
+  if(!openCard) return;
+  if(e.key==='Escape'){ const c=openCard; setOpen(c,false); c.querySelector('.card-media').focus({preventScroll:true}); }
+  if(openCard && openCard._go && !e.target.closest('input')){
+    if(e.key==='ArrowRight'){ openCard._go(1); }
+    if(e.key==='ArrowLeft'){ openCard._go(-1); }
+  }
+});
+
+/* impact media: each video plays through, each image holds, then crossfade to the next, looping */
+$$('[data-seq]').forEach(box=>{
+  const items = $$('.seq', box); let k = 0, timer = null, visible = false;
+  const show = j=>{
+    clearTimeout(timer);
+    items.forEach((f,i)=>{ f.classList.toggle('on', i===j); const v=f.querySelector('video'); if(v && i!==j) v.pause(); });
+    k = j; if(!visible || reduce) return;
+    const v = items[j].querySelector('video');
+    if(v){ try{ v.currentTime = 0; }catch(e){} v.play().catch(()=>{}); v.onended = ()=> items.length>1 ? show((k+1)%items.length) : show(k); }
+    else timer = setTimeout(()=>show((k+1)%items.length), 5000);
+  };
+  new IntersectionObserver(es=>{ visible = es[0].isIntersecting; if(visible) show(k); else { clearTimeout(timer); items.forEach(f=>{ const v=f.querySelector('video'); v&&v.pause(); }); } },{threshold:.3}).observe(box);
+});
+
+/* community response cards fade in, staggered */
+const voiceObs = new IntersectionObserver(es=>{
+  es.forEach(e=>{ if(e.isIntersecting){ const el=e.target; setTimeout(()=>el.classList.add('in'), (+el.dataset.k||0)*110); voiceObs.unobserve(el); } });
+},{threshold:.2});
+$$('.voices').forEach(sec=>$$('.voice',sec).forEach((v,k)=>{ v.dataset.k=k; voiceObs.observe(v); }));
+
+/* ============================================================
+   CURSOR PILL
+   ============================================================ */
+const cursor = $('#cursor');
+function cursorText(t){ cursor.textContent = t; cursor.classList.toggle('no-icon', t==='Close' || t==='Pause'); }
+if(fine){
+  let tx=0, ty=0, cx=0, cy=0, raf;
+  const loop=()=>{ cx += (tx-cx)*.35; cy += (ty-cy)*.35; cursor.style.transform=`translate(${cx+14}px,${cy+14}px)`; raf=requestAnimationFrame(loop); };
+  document.addEventListener('pointermove', e=>{
+    tx=e.clientX; ty=e.clientY;
+    const t = e.target.closest('[data-cursor]');
+    const overCtrl = e.target.closest('.vctrl,.car-btn,.close');
+    if(t && !overCtrl){ cursorText(t.dataset.cursor); if(!cursor.classList.contains('show')){ cx=tx; cy=ty; } cursor.classList.add('show'); }
+    else cursor.classList.remove('show');
+  }, {passive:true});
+  document.addEventListener('pointerleave', ()=>cursor.classList.remove('show'));
+  if(!reduce) loop(); else document.addEventListener('pointermove', e=>cursor.style.transform=`translate(${e.clientX+14}px,${e.clientY+14}px)`);
+}
+
+/* ============================================================
+   DRAFT SWITCH + EMAIL COPY
+   ============================================================ */
+const draft = $('#draftToggle');
+if(!SHOW_DRAFT_SWITCH){ draft.hidden = true; document.body.classList.add('published'); }
+draft.addEventListener('click', ()=>{
+  const pub = document.body.classList.toggle('published');
+  draft.setAttribute('aria-pressed', pub);
+  draft.querySelector('span').textContent = pub ? 'Placeholders hidden' : 'Placeholders shown';
+  if(openCard) setOpen(openCard,false);
+  requestAnimationFrame(fitAsides);
+});
+
+$('#copyEmail').addEventListener('click', ()=>{
+  const btn = $('#copyEmail'), text = $('#email').textContent;
+  const done = ()=>{ btn.textContent='Copied'; setTimeout(()=>btn.textContent='Copy email',1600); };
+  const fallback = ()=>{ const r=document.createRange(); r.selectNodeContents($('#email')); const s=getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent='Selected, press ⌘C'; setTimeout(()=>btn.textContent='Copy email',2200); };
+  try{ navigator.clipboard.writeText(text).then(done, fallback); }catch(e){ fallback(); }
+});
+</script>
+
+</body>
+</html>
